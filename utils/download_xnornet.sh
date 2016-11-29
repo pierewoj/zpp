@@ -1,2 +1,2 @@
-git clone git@github.com:allenai/XNOR-Net.git
+git clone https://github.com/allenai/XNOR-Net.git
 
