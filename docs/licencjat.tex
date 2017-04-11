@@ -5,9 +5,11 @@
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{wrapfig}
-\newtheorem{df}{Definicja}[chapter]
-\newtheorem{tw}{Twierdzenie}[chapter]
-\newtheorem{lem}{Lemat}
+\usepackage{enumitem}
+\usepackage{float}
+
+\usepackage{listings}
+\usepackage[english]{babel}
 
 \title{Inference in neural networks using low-precision arithmetic}
 \author{Krystyna Gajczyk, Jakub Pierewoj, Przemysław Przybyszewski, Adam Starak}
@@ -19,6 +21,7 @@
 \dziedzina{ 11.3 Informatics, Computer Science}
 \tytulang{Inferencja w sieciach neuronowych przy użyciu arytmetyki niskiej precyzji}
 \begin{document}
+
 \maketitle
 \begin{abstract}
 TODO
@@ -95,6 +98,149 @@ TODO
 		\item Binary-Weight-Networks \cite{xornet}
 		\end{itemize}
 
+	\section{Algorithms to implement}
+
+		\subsection{Binarized convolution filters from XORNET \cite{xornet}}
+
+        In this approach we use special binarized filter for forward propagation.
+        \\\\
+        % suggestion: mozna dodac dolary dookola zmiennych wszedie podobnie jak tu ponizej
+        For original filter $W$ forward propagation is:
+        \begin{enumerate}
+                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
+                \item Let $W'$ be matrix containing signs of $W$.
+                \item Calculate $A$ - average of elements for each filter in $W'$, so $A$ is a vector of size equal to number of filters in layer.
+                \item Compute standard convolution using matrix $W'$.
+                \item Return result of convolution multiplied by $A$.
+        \end{enumerate}
+        The back propagation is standard back-propagation made by using original W matrix. To achieve this result we override standard gradient to change sign to identity.
+        \\\\
+        In this type of binarizations, the gradients are in full precision, therefore the backward-pass still requires convolution between 1-bit numbers and 32-bit floating-points.
+
+
+		\subsection{Binarized convolution filters inspired by DoReFa \cite{dorefa}}
+
+		        In this approach we do not implement full methods from DoReFa network. We worked on one idea to average filters over all maps at the same time. It is very similar to XORNET scheme. 
+		        \\
+		        For original filter $W$ forward propagation is:
+		        \begin{enumerate}
+		                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
+		                \item Let $W'$ be matrix containing signs of $W$.
+		                \item Calculate $A$ average of elements for all filters in $W$, so $A$ is a scalar.
+		                \item Compute standard convolution using matrix $W'$.
+		                \item Return result of convolution multiplied by $A$.
+		        \end{enumerate}
+
+		        The only difference is that $A$ is now scalar, not a vector. This approach allows to speed up computation for both forward and back propagation (multiplication by scalar is very efficient) comparing to XORNET.
+
+		\subsection{Binarized filters and activations}
+		        For original filter W and input I forward propagation is:
+		        \begin{enumerate}
+		                \item Let n be the number of elements in each filter, e.g. if filter is matrix 3x3, n=9.
+		                \item Let $W_{sign}$ be matrix containing signs of W divided by A.
+		                \item Calculate A average of elements for each filter in $W_{sign}$, so A is a vector of size equal to numbers of filters in layer.
+		                \item Let $I_{abs}$ be matrix with absolute value of input.
+		                \item Let $I_{sign}$ be matrix with signs of input.
+		                \item Let $K$ to be result of computation of standard convolution using as input $I_{abs}$ and as weights matrix containing $\frac{1}{n}$ on each position.
+		                \item Compute standard convolution using input $I_{sign}$ and weights $W_{sign}$.
+		                \item Return result multiplied by $K$ and $A$.
+		        \end{enumerate}
+
+\chapter{Experiments}
+	\section{Residual network on CIFAR-10}
+		\subsection{Network architecture}
+			We used scheme suggested by authors of \cite{resnet}. For each n n-resnet network contains 6n + 2 layers:
+			\begin{itemize}
+			\item one layer of $3 \times 3$ convolution
+			\item $2n$ layers with $3 \times 3$ convolution on the feature maps of size 32 and 16 filters.
+			\item $2n$ layers with $3 \times 3$ convolution on the feature maps of size 16 and 32 filters.
+			\item $2n$ layers with $3 \times 3$ convolution on the feature maps of size 8 and 64 filters.
+			\item global average pooling with softmax
+			\end{itemize}
+
+			There are 3n shortcuts connections which connect each pair of convolution (so this is why the numbers of layers is 2n, to create n shortcuts).\\\\
+
+			Other used parameters of network (most of them suggested in ResNet paper) are:
+			\begin{itemize}
+			\item XAVIER initialiser for initialising filter.
+			\item Optimizer: Momentum with 0.9 parameter
+			\item Error: tf.nn.softmax\_cross\_entropy\_with\_logits
+			\item Pooling: tf.nn.avg\_pool
+			\item Non-linearity: Relu
+			\end{itemize}
+		\subsection{Results and discussion}
+			\subsubsection{Binary Resnet XORNET style}
+		        \paragraph{Results} 
+		        
+		        The results of experiments are in table below.
+		        \begin{table}[H]
+		                        \caption{Results of Resnet and BinResnet}
+		                        \centering
+		                        \begin{tabular}{c c c c c c}
+		                        \hline\hline
+		                        blocks & layers & epochs & learning rate & ResNet & BinResNet  \\ [0.5ex]
+		                        \hline
+		                                2 & 14  & 0.1   & 15 & 0.8 & 0.77 \\
+		                                5 & 32  & 0.1   & 15 & 0.82 & 0.81 \\
+		                                18      & 110 & 0.1     & 20 & 0.84 & 0.82\\
+		                        \hline
+		                                2 & 14  & 0.01  & 15 & 0.78 & 0.76 \\
+		                                5 & 32  & 0.01  & 15 & 0.79 & 0.78 \\
+		                                18 & 110 & 0.01 & 20 & 0.81 & 0.80 \\
+		                        \hline
+		                        \end{tabular}
+		                        \label{table:nonlin}
+		                \end{table}
+
+		        \paragraph{Discussion} 
+
+		        The results of binarized network are very good comparing to standard ResNet. The property of ResNet is preserved and the are no much difference in accuracy. That is very interesting result, because it shows that binarizing ResNet is only slightly decreasing accuracy so it is worth to use it to save memory and computation time, especcially on CPU.
+
+
+		\subsubsection{Binary Resnet DoReFa style}
+		        \paragraph{Results} 
+		        The results of experiments are included in table below.
+		        \begin{table}[H]
+		                        \caption{Results of Resnet and BinResnet}
+		                        \centering
+		                        \begin{tabular}{c c c c c c c}
+		                        \hline\hline
+		                        blocks & layers & epochs & learning rate & ResNet & BinResNet & BinResnet more epochs  \\ [0.5ex]
+		                        \hline
+		                                2 & 14  & 0.1   & 15 & 0.8 & 0.77 & 0.78 (25 epochs) \\
+		                                5 & 32  & 0.1   & 15 & 0.82 & 0.75 & 0.8 (40 epochs) \\
+		                                18      & 110 & 0.1     & 20 & 0.84 & 0.79 & 0.8 (40 epochs)\\
+		                        \hline
+		                                2 & 14  & 0.01  & 15 & 0.78 & 0.61 & 0.65(25 epochs) \\
+		                                5 & 32  & 0.01  & 15 & 0.79 & 0.63 & 0.67 (25 epochs) \\
+		                                18 & 110 & 0.01 & 20 & 0.81 & 0.62 & 0.67 (40 epochs) \\
+		                        \hline
+		                        \end{tabular}
+		                        \label{table:nonlin}
+		        \end{table}
+
+		        \paragraph{Discussion} 
+		                The network with binarization which takes average over all filters is affected more easily by changes in model parameters. For smaller learning rates it learns quite slow, achieving around 75\% of accuracy compared to classical resnet in same number of epochs. It has a potencial for longer training - training it for more than 40 epochs can generate accuracy around 0.8. 
+		                \\\\
+		                Of course it is faster than XORNET implementation, but because it requires more training and gets lower accuracy, one must decide if this is good approach based on available computation machine. For testing on personal laptop, XORNET is better solution.
+
+			\subsubsection{Binary Resnet with binary weights and activation}
+			        \paragraph{Results} 
+			        
+			        These experiments did not end well. For bigger number of residual blocks network is not learning at all (starting from 3 blocks). For smaller number of blocks the result on training set are on plot below. TODO - FIX.
+			        \begin{figure}[H]
+			        \centering
+			        \textbf{Training process}\par\medskip
+			        \includegraphics[scale=0.7]{wykres}
+			\end{figure}
+			        \paragraph{Discussion} 
+			        
+			        \begin{itemize}
+			                \item Implementation which is using tf.nn.conv2d 2 times in each binarization process is much slower. 
+			                \item Network with binarized both weights and activation is much harder to learn. In 2-layer Lenet the results were still very stable, but adding more layers, for example 14 in 2-blocks ResNet made network able to learn only during first few rounds of computation.
+			                \item Smaller learning rate allows network to learn. Unfortunately the problem of deeper network still occurs, so the advantage of ResNet is not preserved.
+			        \end{itemize}
+
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -104,6 +250,10 @@ TODO
 \bibitem{xornet} Mohammad Rastegari, Vicente Ordonez, Joseph Redmon, Ali Farhadi, \textit{XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks}, https://arxiv.org/abs/1603.05279 (2016)
 
 \bibitem{binaryConnect} Matthieu Courbariaux, Yoshua Bengio, Jean-Pierre David, \textit{BinaryConnect: Training Deep Neural Networks with binary weights during propagations}, https://arxiv.org/abs/1511.00363 (2015)
+
+\bibitem{dorefa} Shuchang Zhou, Yuxin Wu, Zekun Ni, Xinyu Zhou, He Wen, Yuheng Zou, \textit{DoReFa-Net: Training Low Bitwidth Convolutional Neural Networks with Low Bitwidth Gradients}, https://arxiv.org/abs/1606.06160 (2016)
+
+\bibitem{resnet} Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun, \textit{Deep Residual Learning for Image Recognition}, https://arxiv.org/abs/1512.03385 (2015)
 
 \end{thebibliography}
 
