@@ -37,7 +37,11 @@ TODO
 	The most important part of deep learning is training net based on the samples that the result is known. After each training step one can change weights and activation in model to make output of the network as close as possible to expected value.
 	\\\\
 	Currently deep neural networks get better results than state-of-the-art algorithms in many areas, such as computer vision and speech recognition. This breakthrough was possible because computing power of modern computers is high enough to handle intensive workload required to train large artificial neural networks.
+
+	\section{Deep and convolutional networks}
+		TODO
 	\\\\
+	\section{Why binarized networks are interesting?}
 	Deep neural networks (DNN) usually use high precision (floating point) numbers to represent
 	weights and activations. Computations using that arithmetic are usually handled by
 	graphic cards. This is the factor, which is limiting use of deep neural networks on devices with low computing power, such as mobile phones.
@@ -104,7 +108,6 @@ TODO
 
         In this approach we use special binarized filter for forward propagation.
         \\\\
-        % suggestion: mozna dodac dolary dookola zmiennych wszedie podobnie jak tu ponizej
         For original filter $W$ forward propagation is:
         \begin{enumerate}
                 \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
@@ -121,7 +124,9 @@ TODO
 		\subsection{Binarized convolution filters inspired by DoReFa \cite{dorefa}}
 
 		        In this approach we do not implement full methods from DoReFa network. We worked on one idea to average filters over all maps at the same time. It is very similar to XORNET scheme. 
-		        \\
+		        \\\\
+		        TODO - opis dokładniejszy co analizuje DoReFa 
+		        \\\\
 		        For original filter $W$ forward propagation is:
 		        \begin{enumerate}
 		                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
@@ -147,6 +152,7 @@ TODO
 		        \end{enumerate}
 
 \chapter{Experiments}
+	\section{Lenet on MNIST - TODO}
 	\section{Residual network on CIFAR-10}
 		\subsection{Network architecture}
 			We used scheme suggested by authors of \cite{resnet}. For each n n-resnet network contains 6n + 2 layers:
