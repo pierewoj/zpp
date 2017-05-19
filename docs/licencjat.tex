@@ -152,7 +152,50 @@ TODO
 		        \end{enumerate}
 
 \chapter{Experiments}
-	\section{Lenet on MNIST - TODO}
+	\section{LeNet on MNIST}
+		LeNet is a small 7-level network invented by Yann LeCun et al. It is one of the most known neural network due to it’s simplicity. Almost everyone, who is new to machine learning, begins with implementing it on MNIST dataset. However, it does not mean that LeNet is not a powerful tool. According to Wikipedia, couple of banks are applying LeNet to recognise written digits on cheques. Provided implementation was highly affected by Tensorflow's tutorial. \\
+		\subsection{Network architecture}
+			\begin{itemize}
+			\item Convolution layer: kernel size $5 \times 5 \times 32$
+			\item Max Pool layer: kernel size $2 \times 2$
+			\item Convolution layer: kernel size $5 \times 5 \times 64$
+			\item Max Pool layer: kernel size $2 \times 2$
+			\item Fully-connected layer: $1024$ neurons
+			\item Dropout layer: $0.5$
+			\item Fully-connected layer: $10$ neurons
+			\end{itemize}
+		\subsection{Parameters}
+			\begin{itemize}
+			\item Weight initialization: truncated normal, stddev $0.1$
+			\item Optimizer: Adam Optimizer, learning rate $10^{-4}$
+			\item Error: softmax cross entropy with logits
+			\item Non-linearity: ReLU
+			\end{itemize}
+	\section{AlexNet on ImageNet}
+	AlexNet caused a huge breakthrough in deep neural networks after a great success during ImageNet Large-Scale Visual Recognition Challenge in 2012. It achieved top 5 test error rate of $15.4\%$ leaving other opponents far behind. In comparison, the next team achieved an error rate of $26.2\%$. 
+	\section{Finetuned AlexNet on oxford-102}
+	It has been 5 years since the astonishing victory of AlexNet, although people are still experimenting with it achieving great results. jimgoo(nick z gita, trzeba bedzie zacytowac) proposed a very clever approach of learning, which gave him a top 1 error rate of $7\%$ on oxford-102 set. In this experiment we try to replicate the results and find out whether it is possible to achieve similar accuracy using binarized network. 
+		\subsection{Network architecture}
+			\begin{itemize}
+			\item Convolution layer: kernel size $11 \times 11 \times 96$, learning rate $10^{-3}$
+			\item Max Pool layer: kernel size $3 \times 3$
+			\item Normalization layer
+			\item Convolution layer: kernel size $5 \times 5 \times 256$, learning rate $10^{-3}$
+			\item Max Pool layer: kernel size $3 \times 3$
+			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
+			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
+			\item Convolution layer: kernel size $3 \times 3 \times 256$, learning rate $10^{-3}$
+			\item Fully-connected layer: $4096$ neurons, learning rate $10^{-3}$
+			\item Dropout layer: $0.5$
+			\item Fully-connected layer: $102$ neurons, learning rate $10^{-2}$
+			\end{itemize}
+		\subsection{Parameters}
+			\begin{itemize}
+			\item Weight initialization: pretrained on ImageNet 2012 dataset
+			\item Optimizer: stochastic gradient descent
+			\item Error: softmax cross entropy with logits
+			\item Non-linearity: ReLU
+			\end{itemize}
 	\section{Residual network on CIFAR-10}
 		\subsection{Network architecture}
 			We used scheme suggested by authors of \cite{resnet}. For each n n-resnet network contains 6n + 2 layers:
