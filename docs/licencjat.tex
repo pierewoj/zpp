@@ -154,6 +154,9 @@ TODO
 \chapter{Experiments}
 	\section{LeNet on MNIST}
 		LeNet is a small 7-level network invented by Yann LeCun et al. It is one of the most known neural network due to it’s simplicity. Almost everyone, who is new to machine learning, begins with implementing it on MNIST dataset. However, it does not mean that LeNet is not a powerful tool. According to Wikipedia, couple of banks are applying LeNet to recognise written digits on cheques. Provided implementation was highly affected by Tensorflow's tutorial. \\
+		\subsection{MNIST Dataset}
+			MNIST is a subset of NIST. Each example represents a handwritten digit drawn in black&white. Examples were resized and cropped, so that each digit is centered and the size is equal to 18x18 pixels. The dataset is split into 2 parts: training (60,000 pictures) and test (10,000 pictures).
+
 		\subsection{Network architecture}
 			\begin{itemize}
 			\item Convolution layer: kernel size $5 \times 5 \times 32$
