@@ -66,7 +66,7 @@
     \null
     \vfill
     
-   \textbf{\Large Oświadczenie kierującego pracą }
+   \textbf{\Large Oświadczenie kierującego pracą}
       \vspace{10mm}
       
    Potwierdzam, że niniejsza praca została przygotowana pod moim 
