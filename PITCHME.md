@@ -1,8 +1,13 @@
 #### Slajd pierwszy
 <br>
-<span style="color:gray">Inference in neural networsk</span>
+<span style="color:gray">Inference in neural networks using low-precision arithmetic</span>
 <br>
-<span style="color:gray">AS, KG, PP, JP</span>
+<span style="color:gray">
+  Krystyna Gajczyk<br>
+  Jakub Pierewoj<br>
+  Przemysław Przybyszewski<br>
+  Adam Starak<br>
+</span>
 ---
 
 ### Drugi slajd
