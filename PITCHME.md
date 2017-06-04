@@ -6,6 +6,7 @@
   Przemysław Przybyszewski<br>
   Adam Starak<br>
 </span>
+
 ---
 
 ### Tensorflow
@@ -13,7 +14,7 @@
 2. Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
 3. Umożliwia łatwą implementację sieci neuronowych
 4. Posiada dobre wsparcie społeczności
-![alt text](https://lh3.googleusercontent.com/hIViPosdbSGUpLmPnP2WqL9EmvoVOXW7dy6nztmY5NZ9_u5lumMz4sQjjsBZ2QxjyZZCIPgucD2rhdL5uR7K0vLi09CEJYY=s688 "Logo TF")
+<img src="https://lh3.googleusercontent.com/hIViPosdbSGUpLmPnP2WqL9EmvoVOXW7dy6nztmY5NZ9_u5lumMz4sQjjsBZ2QxjyZZCIPgucD2rhdL5uR7K0vLi09CEJYY=s688" width="48">
 
 ---
 
