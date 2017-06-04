@@ -1,6 +1,4 @@
-#### Slajd pierwszy
-<br>
-<span style="color:gray">Inference in neural networks using low-precision arithmetic</span>
+#### Inference in neural networks using low-precision arithmetic
 <br>
 <span style="color:gray">
   Krystyna Gajczyk<br>
