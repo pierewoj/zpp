@@ -10,10 +10,10 @@
 ---
 
 ### <img src="https://wiki.tum.de/download/attachments/25009442/tensor-flow_opengraph_h.png?version=1&modificationDate=1485888308193&api=v2" width="300">
-1. Otwarto-źródłowa platforma do obliczeń numerycznych rozwijana przez Google
-2. Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
-3. Umożliwia łatwą implementację sieci neuronowych
-4. Posiada dobre wsparcie społeczności
+* Otwarto-źródłowa platforma do obliczeń numerycznych rozwijana przez Google
+* Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
+* Umożliwia łatwą implementację sieci neuronowych
+* Posiada dobre wsparcie społeczności
 
 
 ---
