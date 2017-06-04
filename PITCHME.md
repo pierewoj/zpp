@@ -1,8 +1,3 @@
-.reveal section img {
-  border: 0;
-  box-shadow: none;
-}
-
 #### Inference in neural networks using low-precision arithmetic
 <br>
 <span style="color:gray">
