@@ -9,8 +9,7 @@
 
 ---
 
-### Tensorflow
-![Logo](https://lh3.googleusercontent.com/hIViPosdbSGUpLmPnP2WqL9EmvoVOXW7dy6nztmY5NZ9_u5lumMz4sQjjsBZ2QxjyZZCIPgucD2rhdL5uR7K0vLi09CEJYY=s688)
+### Tensorflow <img src="https://lh3.googleusercontent.com/hIViPosdbSGUpLmPnP2WqL9EmvoVOXW7dy6nztmY5NZ9_u5lumMz4sQjjsBZ2QxjyZZCIPgucD2rhdL5uR7K0vLi09CEJYY=s688" width="48">
 1. Otwarto-źródłowa platforma do obliczeń numerycznych rozwijana przez Google
 2. Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
 3. Umożliwia łatwą implementację sieci neuronowych
