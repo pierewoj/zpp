@@ -40,7 +40,7 @@ TODO
 \chapter{Introduction}
 
 \krystynaintodo{akapit informujący, że to praca powstała w ramach projektu ZPP}
-	
+
 \section{What is deep learning and why is it interesting?}
 
 Deep learning is a branch of machine learning which tries to model high level abstractions in data (like understanding words or finding objects on image) using a graph of simple elements - neurons, connected with specific activations and weights to others. It has recently gained a lot of interest from the industry, especially after recent successes in image or speech recognision.
@@ -57,7 +57,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	graphic cards. On devices with low computing power, such as mobile phones, use of deep neural networks is very limited.
 
 	\krystynaintodo{opis ile można zaoszczędzić przy różnych typach binaryzacji + inne potencjalne zyski}
-	
+
 	Researchers tried to address this problem in the number of papers in the recent years. A couple of main approaches have been investigated in order to reduce inefficient computation and memory usage in deep neural networks while maintaining the classification accuracy. Those approaches can be summarized as:
 
 	\begin{itemize}
@@ -65,7 +65,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\item Compression of pre-trained DNN - it is possible to prune a DNN at inference time by discarding the weights, that don’t bring any information to the classification process. It has been also further proposed to reduce the number of parameters and/or activations in order to increase acceleration, compression. This reduces the main blockers for using DNN on small, embedded devices, such as memory usage and energy. Memory usage can be achieved through quantizing and compressing weights with Huffman coding or hashing weights, such that the weights assigned to one hash bucket share the same parameter.
 		\item Compact layers - this approach also reduces the memory usage and computation time. This approach replaces parts of the DNN structure with corresponding elements, which are smaller in size and bring nearly as much information. A few techniques have been examined, such as replacing a fully connected layer with global average pooling and replacing a convolution with a corresponding one requiring smaller amount of parameters.
 		\item Quantizing parameters - this technique aims to replace the floating-point parameters of the neural network with the quantized values (through vector quantization methods), which require smaller number of bits of memory and need simpler arithmetic operations for computation. Number of DNN with quantization have been designed: 8-bit integer instead of 32-bit floating point activations, ternary weights and 3-bit activations instead of floating points, etc. It was shown, that this approach can lead to a DNN representation, which accuracy is not very far off from the state-of-the-art results.
-		\item Network binarization - this is the extreme case of the parameter quantization technique. Due to a new learning algorithm, Expected Back Propagation, which bases on inferring network with binary weights and neurons through a variational Bayesian approach. Techniques using this approach mainly use the real-valued weights as a reference for their binarization. This idea was further extended to binarize both weights and activations, which was implemented in networks such as BinaryNet and XNOR-Net. 
+		\item Network binarization - this is the extreme case of the parameter quantization technique. Due to a new learning algorithm, Expected Back Propagation, which bases on inferring network with binary weights and neurons through a variational Bayesian approach. Techniques using this approach mainly use the real-valued weights as a reference for their binarization. This idea was further extended to binarize both weights and activations, which was implemented in networks such as BinaryNet and XNOR-Net.
 
 	\end{itemize}
 
@@ -73,17 +73,17 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 
 	\section{What was the goal of the project?}
-	
+
 	\krystynaintodo{to jest do napisania od nowa - chcemy pokazać, że sieci binarne mają przyzwoitą skuteczność oraz że dodawanie feature mapów niesie realne korzyści pozwalające na taką samą skuteczność}
 
-	The main goal is to analyze the results of inference, depending on 3 properties: 
+	The main goal is to analyze the results of inference, depending on 3 properties:
 	\begin{itemize}
 	\item topology
 	\item weights
 	\item feature maps
 	\end{itemize}
 
-	Each DNN has its own tolerance of inference precision. There are numerous topologies in neural networks. Each topology indicates the number layers and defines how the neurons are connected. The aim is to study the structures and predict which one will behave the best in our environment. Dealing with 1-bit integer weights is going to strongly affect the complexity of computational algorithms and the size of data. The whole workflow is going to be much faster. 1-bit operations are a way simpler than the 32-bit ones. Furthermore, the size of the inputs will require less memory. That is the perfect solution for less efficient devices. 
+	Each DNN has its own tolerance of inference precision. There are numerous topologies in neural networks. Each topology indicates the number layers and defines how the neurons are connected. The aim is to study the structures and predict which one will behave the best in our environment. Dealing with 1-bit integer weights is going to strongly affect the complexity of computational algorithms and the size of data. The whole workflow is going to be much faster. 1-bit operations are a way simpler than the 32-bit ones. Furthermore, the size of the inputs will require less memory. That is the perfect solution for less efficient devices.
 	\\\\
 	Unfortunately, those properties will negatively affect on the quality of prediction. Thus, the increase of the depth of chosen net should be also taken into consideration. A feature map is an input for the next level neurons.  The loss of data and weights precision can be alleviated by the increased number of the feature maps. We wanted to estimate ratio between number of feature maps in basic DNN and number of feature maps in low arithmetic precision DNN that maintain similar quality of the prediction.
 	 To sum up, the research may bear out, that BDNNs have some great properties, which should be investigated much deeper. It may also find out, that they achieve better results in some cases and the present solutions should be replaced with BDNN.
@@ -92,11 +92,11 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 	\section{Used framework}
 
-		We decided to work with one of open source framework that can be used for neural networks. The structure of BNN proposed in Binary Connect \cite{binaryConnect} and XORNET \cite{xornet} is very similar to standard convolutional network so there is no need to implement BNN from scratch. 
-		
-		All frameworks that we analyse (TensorFlow, Torch, Caffe) have similar functionalities, for example they have already implemented pooling and affine layers so we can easily reuse them. 
+		We decided to work with one of open source framework that can be used for neural networks. The structure of BNN proposed in Binary Connect \cite{binaryConnect} and XORNET \cite{xornet} is very similar to standard convolutional network so there is no need to implement BNN from scratch.
 
-		From available frameworks we decided to choose TensorFlow \cite{tensorFlow}. It is an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (called tensors) transported between them. In case on of neural networks, nodes will represent layers of network. 
+		All frameworks that we analyse (TensorFlow, Torch, Caffe) have similar functionalities, for example they have already implemented pooling and affine layers so we can easily reuse them.
+
+		From available frameworks we decided to choose TensorFlow \cite{tensorFlow}. It is an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (called tensors) transported between them. In case on of neural networks, nodes will represent layers of network.
 		The advantage of TensorFlow over other frameworks is really good community support and solid documentation.
 
 	\section{Our implementation}
@@ -114,7 +114,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\krystynaintodo{Opis zbioru kwiatki + obrazki}
 		\subsection{Residual network on CIFAR-10}
 		\krystynaintodo{Opis resneta + obrazki - tu koniecznie musi się pojawić pojęcie bloku}
-		\krystynaintodo{opis CIFAR + obrazki}	
+		\krystynaintodo{opis CIFAR + obrazki}
 	\section{Implemented binarization algorithm}
 
 		\subsection{Binarized convolution filters from XORNET \cite{xornet}}
@@ -134,9 +134,9 @@ Currently deep neural networks get better results than state-of-the-art algorith
         In this type of binarizations, the gradients are in full precision, therefore the backward-pass still requires convolution between 1-bit numbers and 32-bit floating-points.
 		\subsection{Binarized convolution filters inspired by DoReFa \cite{dorefa}}
 
-		        In this approach we do not implement full methods from DoReFa network. We worked on one idea to average filters over all maps at the same time. It is very similar to XORNET scheme. 
+		        In this approach we do not implement full methods from DoReFa network. We worked on one idea to average filters over all maps at the same time. It is very similar to XORNET scheme.
 		        \\\\
-		        TODO - opis dokładniejszy co analizuje DoReFa 
+		        TODO - opis dokładniejszy co analizuje DoReFa
 		        \\\\
 		        For original filter $W$ forward propagation is:
 		        \begin{enumerate}
@@ -171,9 +171,9 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	\section{Residual network on CIFAR-10}
 		\subsection{Results and discussion}
 			\subsubsection{Binary Resnet XORNET style}
-		        \paragraph{Results} 
-		        
-		        
+		        \paragraph{Results}
+
+
 		        The results of experiments are in table \krystynaintodo{nauczyć się numerować tabele}.
 		        \begin{table}[H]
 		                        \caption{Results of Resnet and BinResnet}
@@ -194,13 +194,13 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		                        \label{table:nonlin}
 		                \end{table}
 
-		        \paragraph{Discussion} 
+		        \paragraph{Discussion}
 
 		        The results of binarized network are very good comparing to standard ResNet. The property of ResNet is preserved and the are no much difference in accuracy. That is very interesting result, because it shows that binarizing ResNet is only slightly decreasing accuracy so it is worth to use it to save memory and computation time, especially on CPU.
 
 
 		\subsubsection{Binary Resnet DoReFa style}
-		        \paragraph{Results} 
+		        \paragraph{Results}
 		        The results of experiments are included in table below. \krystynaintodo{nauczyć się ładnie formatować tabele w latexie}
 		        \begin{table}[H]
 		                        \caption{Results of Resnet and BinResnet}
@@ -221,18 +221,18 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		                        \label{table:nonlin}
 		        \end{table}
 
-		        \paragraph{Discussion} 
-		                The network with binarization which takes average over all filters is affected more easily by changes in model parameters. For smaller learning rates it learns quite slow, achieving around 75\% of accuracy compared to classical resnet in same number of epochs. It has a potencial for longer training - training it for more than 40 epochs can generate accuracy around 0.8. 
+		        \paragraph{Discussion}
+		                The network with binarization which takes average over all filters is affected more easily by changes in model parameters. For smaller learning rates it learns quite slow, achieving around 75\% of accuracy compared to classical resnet in same number of epochs. It has a potencial for longer training - training it for more than 40 epochs can generate accuracy around 0.8.
 		                \\\\
 		                Of course it is faster than XORNET implementation, but because it requires more training and gets lower accuracy, one must decide if this is good approach based on available computation machine. For testing on personal laptop, XORNET is better solution.
 
 			\subsubsection{Binary Resnet with binary weights and activation}
-			        \paragraph{Results} 
+			        \paragraph{Results}
 			        \krystynaintodo{zdebugować kod i puścić eksperymenty jeszcze raz}
-			        \paragraph{Discussion} 
-			        
+			        \paragraph{Discussion}
+
 			        \begin{itemize}
-			                \item Implementation which is using tf.nn.conv2d 2 times in each binarization process is much slower. 
+			                \item Implementation which is using tf.nn.conv2d 2 times in each binarization process is much slower.
 			                \item Network with binarized both weights and activation is much harder to learn. In 2-layer Lenet the results were still very stable, but adding more layers, for example 14 in 2-blocks ResNet made network able to learn only during first few rounds of computation.
 			                \item Smaller learning rate allows network to learn. Unfortunately the problem of deeper network still occurs, so the advantage of ResNet is not preserved.
 			        \end{itemize}
@@ -246,6 +246,21 @@ Currently deep neural networks get better results than state-of-the-art algorith
 \chapter{Team members contribution}
 	\krystynaintodo{Podział prac}
 
+\chapter{Dictionary}
+    \begin{itemize}
+        \item Neural network - a machine learning model, inspired by a structure of a human brain. It consits of a large collection of neurons grouped into layers. Each neuron is connected to a set of other neurons. Each connection has an assigned value (also known as weight), which measures its importance.
+
+        \item Training - a process which consists of modification of connection weights after processing input data by a neural network and comparing its output with the desired output.
+
+        \item Inference - a process of computing neural network output based on the input and values of neuron weights
+
+        \item Convolution (discrete) - a mathematical function defined as follows
+        $$ (f\star g)(n) = \sum_{m=-\infty}^{\infty} f[m]*g[n-m]$$ where $$f,g\in Z\rightarrow Z$$
+
+        \item Convolutonal layer - a neural network layer which performs a convolution operation between its inputs and weights (in this case they are usually called weight filters or kernels). Usage of this kind of layers proved to be successful in the field of image recognition, video recognition and natural language processing.
+		\krystynaintodo{dodać więcej}
+
+    \end{itemize}
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -266,4 +281,3 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 
 \end{document}
-
