@@ -6,7 +6,18 @@
   Przemysław Przybyszewski<br>
   Adam Starak<br>
 </span>
+---
+### Sieci neuronowe - co portafią
 
+<img src=http://students.mimuw.edu.pl/~kg332118/Engel1.jpg>
+---
+### Sieci neuronowe - co portafią
+
+<img src=http://students.mimuw.edu.pl/~kg332118/Engel-step1.jpg>
+---
+### Sieci neuronowe - co portafią
+
+<img src=http://students.mimuw.edu.pl/~kg332118/Engel-step2.jpg>
 ---
 
 ### <img src="https://wiki.tum.de/download/attachments/25009442/tensor-flow_opengraph_h.png?version=1&modificationDate=1485888308193&api=v2" width="300">
