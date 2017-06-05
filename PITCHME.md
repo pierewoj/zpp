@@ -7,15 +7,15 @@
   Adam Starak<br>
 </span>
 ---
-### Sieci neuronowe - co portafią
+### Sieci neuronowe - co potrafią
 
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel1.jpg>
 ---
-### Sieci neuronowe - co portafią
+### Sieci neuronowe - co potrafią
 
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel-step1.jpg>
 ---
-### Sieci neuronowe - co portafią
+### Sieci neuronowe - co potrafią
 
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel-step2.jpg>
 ---
