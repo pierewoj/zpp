@@ -21,28 +21,27 @@ class Lenet():
     def __init__(self, x, keep_prob, conv=conv2d, device='/cpu:0', rate=1):
         inc = lambda x: np.int(np.floor(rate*x))
         with tf.device(device):
-            x_image = tf.reshape(x, [-1,28,28,1])
+            self.x_image = tf.reshape(x, [-1,28,28,1])
 
-            W_conv1 = weight_variable([5, 5, 1,inc(32)])
-            b_conv1 = bias_variable([inc(32)])
-            h_conv1 = tf.nn.relu(conv(x_image, W_conv1) + b_conv1)
-            h_pool1 = max_pool_2x2(h_conv1)
+            self.W_conv1 = weight_variable([5, 5, 1,inc(32)])
+            self.b_conv1 = bias_variable([inc(32)])
+            self.h_conv1 = tf.nn.relu(conv(self.x_image, self.W_conv1) + self.b_conv1)
+            self.h_pool1 = max_pool_2x2(self.h_conv1)
 
-            W_conv2 = weight_variable([5, 5, inc(32), inc(32)])
-            b_conv2 = bias_variable([inc(32)])
-            h_conv2 = tf.nn.relu(conv(h_pool1, W_conv2) + b_conv2) 
-            h_pool2 = max_pool_2x2(h_conv2)
+            self.W_conv2 = weight_variable([5, 5, inc(32), inc(32)])
+            self.b_conv2 = bias_variable([inc(32)])
+            self.h_conv2 = tf.nn.relu(conv(self.h_pool1, self.W_conv2) + self.b_conv2) 
+            self.h_pool2 = max_pool_2x2(self.h_conv2)
 
-            W_fc1 = weight_variable([7 * 7 * inc(32), 1024])
-            b_fc1 = bias_variable([1024])
+            self.W_fc1 = weight_variable([7 * 7 * inc(32), 1024])
+            self.b_fc1 = bias_variable([1024])
 
-            h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*inc(32)])
-            h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+            self.h_pool2_flat = tf.reshape(self.h_pool2, [-1, 7*7*inc(32)])
+            self.h_fc1 = tf.nn.relu(tf.matmul(self.h_pool2_flat, self.W_fc1) + self.b_fc1)
 
-            h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+            self.h_fc1_drop = tf.nn.dropout(self.h_fc1, keep_prob)
 
-            W_fc2 = weight_variable([1024, 10])
-            b_fc2 = bias_variable([10])
+            self.W_fc2 = weight_variable([1024, 10])
+            self.b_fc2 = bias_variable([10])
 
-            self.y = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
-        
+            self.y = tf.matmul(self.h_fc1_drop, self.W_fc2) + self.b_fc2
