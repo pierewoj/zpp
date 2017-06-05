@@ -15,7 +15,7 @@ def conv_bin_activ(x, filter, strides=[1,1,1,1], padding='SAME'):
     	K = conv2d(absX, k, strides, padding)
     	x_sign = tf.sign(x)
     	w_sign = tf.sign(filter/a) 
-    	return conv2d(x_sign, w_sign, strides, padding)*a*K
+    	return conv2d(x_sign, w_sign, strides, padding)*a*
 
 def conv_bin_weights_vector(x, filter, strides=[1,1,1,1], padding='SAME'):
     G = tf.get_default_graph()
