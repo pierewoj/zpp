@@ -34,13 +34,6 @@
 <img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
 
 ---
-
-### SIECI KONWOLUCYJNE
-* Trzy typy warstw: konwolucyjna, 'pooling' oraz 'fully-connected'
-* Kazdy neuron w warstwie konwolucyjnej jest polaczony z pewnym lokalnym podzbiorem danych wejsciowych.
-### <img src="http://students.mimuw.edu.pl/~pp332493/CNN_layer.png">
-
----
 ### GENEZA PROJEKTU
 <img src="http://students.mimuw.edu.pl/~kg332118/Wybor-drogi.jpg">
 ---
@@ -57,6 +50,14 @@
 
 ---
 
+
+### SIECI KONWOLUCYJNE
+* Trzy typy warstw: konwolucyjna, 'pooling' oraz 'fully-connected'
+* Kazdy neuron w warstwie konwolucyjnej jest polaczony z pewnym lokalnym podzbiorem danych wejsciowych.
+### <img src="http://students.mimuw.edu.pl/~pp332493/CNN_layer.png">
+
+---
+
 ### BINARNA KONWOLUCJA
 ### <img src="http://students.mimuw.edu.pl/~pp332493/binconv.png">
 
@@ -64,19 +65,16 @@
 
 ### CELE PROJEKTU
 
-Glowne:
-* Weryfikacja, czy zwiekszanie ilosci feature map poprawia dokladnosc zbinaryzowanej sieci neuronowej.
-* Sprawdzenie, o ile srednio nalezy zwiekszyc te ilosc, aby osiagnac taka sama jakosc zbinaryzowanej sieci neuronowej jak oryginalnej.
+Główne:
+* Weryfikacja, czy zwiekszanie ilości feature map poprawia dokladność zbinaryzowanej sieci neuronowej.
+* Sprawdzenie, o ile średnio należy zwiekszyć tę ilość, aby osiagnąć taką samą jakość zbinaryzowanej sieci neuronowej jak oryginalnej.
 ---
 
 ### CELE PROJEKTU
 Poboczne:
-* Stworzenie operacji binarnej konwolucji jako operacje w Tensorflow (jedna ze zbinaryzowanymi wagami filtrow, druga ze zbinaryzowanymi wagami filtrow oraz danymi wejsciowymi).
+* Stworzenie operacji binarnej konwolucji jako operacji w Tensorflow
 * Odtworzenie wynikow pracy opisanych przez tworcow XNORNET-a dla ImageNeta i AlexNeta.
-* Sprawdzenie, czy podobne dzialania mozna powtorzyc na sieciach o innych strukturach
-
----
-
+* Sprawdzenie, czy podobne działania można powtórzyć na sieciach o innych strukturach
 
 ---
 
@@ -102,9 +100,7 @@ Poboczne:
 * Utworzona nowa operacja w tensorflow
 * Dostępna z API Pythonowego tak jak inne operacje
 * Pozwala na optymalizacje, np użycie XNOR bitcount zamiast mnożenia i dodawania liczb zmiennoprzecinkowych
-* Nie ma typów bitowych w TF?? tf.boolean
 * Zgłoszenie prośby o dodanie naszej implementacji do TF
-* jakieś przejście do eksperymentów
 
 ---
 
