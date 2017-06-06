@@ -47,3 +47,16 @@
 * Nie ma typów bitowych w TF?? tf.boolean
 * Zgłoszenie prośby o dodanie naszej implementacji do TF
 * jakieś przejście do eksperymentów
+
+---
+
+### ILSVRC ImageNet - Coroczna olimpiada dla komputerów
+* Rozpoznawanie obiektów
+* Lokalizowanie obiektów
+* Zadania dotyczą zarówno obrazów tudzież filmów
+* Co roku zbiór danych posiada około 1mln obrazów i 1000 klas
+
+---
+
+### ILSVRC ImageNet - Wyniki na przełomie ostatnich lat
+<img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
