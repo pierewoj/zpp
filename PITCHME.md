@@ -46,6 +46,11 @@
 ---
 
 ### GENEZA PROJEKTU
+### <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Intel-logo.svg/2000px-Intel-logo.svg.png">
+
+---
+
+### GENEZA PROJEKTU
 ### <img src="http://students.mimuw.edu.pl/~pp332493/xnornet.png">
 
 ---
@@ -103,6 +108,9 @@ Poboczne:
 * Zgłoszenie prośby o dodanie naszej implementacji do TF
 
 ---
+### TO JEST MIEJSCE NA WYPUNKTOWANIE UŻYTYCH ARCHITEKTUR
+
+---
 
 ### AlexNet na oxford-102
 <img src=http://students.mimuw.edu.pl/~as361021/AlexNet.png>
@@ -138,3 +146,5 @@ Poboczne:
   </tr>
 </table>
 
+---
+### TU JEST MIEJSCE NA OPISANIE WYNIKÓW DLA RÓŻNYCH RATE 
