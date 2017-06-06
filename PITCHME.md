@@ -22,8 +22,7 @@
 ---
 
 ### BINARNA KONWOLUCJA
-
-Tu jeszcze wstawie obrazki przedstawiajace to.
+### <img src="http://students.mimuw.edu.pl/~pp332493/binconv.png">
 
 ---
 
