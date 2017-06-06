@@ -22,6 +22,38 @@
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel-step2.jpg>
 ---
 
+### SIECI KONWOLUCYJNE
+* Trzy typy warstw: konwolucyjna, 'pooling' oraz 'fully-connected'
+* Kazdy neuron w warstwie konwolucyjnej jest polaczony z pewnym lokalnym podzbiorem danych wejsciowych.
+### <img src="http://students.mimuw.edu.pl/~pp332493/CNN_layer.png">
+
+---
+
+### GENEZA PROJEKTU
+### <img src="http://students.mimuw.edu.pl/~pp332493/xnornet.png">
+
+---
+
+### BINARNA KONWOLUCJA
+### <img src="http://students.mimuw.edu.pl/~pp332493/binconv.png">
+
+---
+
+### CELE PROJEKTU
+
+Glowne:
+* Weryfikacja, czy zwiekszanie ilosci feature map poprawia dokladnosc zbinaryzowanej sieci neuronowej.
+* Sprawdzenie, o ile srednio nalezy zwiekszyc te ilosc, aby osiagnac taka sama jakosc zbinaryzowanej sieci neuronowej jak oryginalnej.
+Poboczne:
+* Stworzenie operacji binarnej konwolucji jako operacje w Tensorflow (jedna ze zbinaryzowanymi wagami filtrow, druga ze zbinaryzowanymi wagami filtrow oraz danymi wejsciowymi).
+* Odtworzenie wynikow pracy opisanych przez tworcow XNORNET-a dla ImageNeta i AlexNeta.
+* Sprawdzenie, czy podobne dzialania mozna powtorzyc na sieciach o innych strukturach
+
+---
+
+
+---
+
 ### <img src="https://wiki.tum.de/download/attachments/25009442/tensor-flow_opengraph_h.png?version=1&modificationDate=1485888308193&api=v2" width="300">
 * Otwarto-źródłowa platforma do obliczeń numerycznych rozwijana przez Google
 * Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
