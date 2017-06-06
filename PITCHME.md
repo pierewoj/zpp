@@ -60,3 +60,35 @@
 
 ### ILSVRC ImageNet - Wyniki na przełomie ostatnich lat
 <img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
+
+### AlexNet na oxford-102
+<img src=http://students.mimuw.edu.pl/~as361021/AlexNet.png>
+
+### Wyniki eksperymentów
+
+<table>
+  <tr>
+    <th><th>
+    <th>LeNet on MNIST</th>
+    <th>AlexNet on oxford-102</th> 
+    <th>ResNet-18 CIFAR-10</th>
+  </tr>
+    <tr>
+    <th>Basic<th>
+    <th>0.98</th>
+    <th>0.85</th> 
+    <th>0.84</th>
+  </tr>
+  <tr>
+    <th>Binary weights vectpr<th>
+    <th>0.98</th>
+    <th>0.71</th> 
+    <th>0.83</th>
+  </tr>
+<tr>
+  <th>Binary weights scalar<th>
+  <th>0.98</th>
+  <th>0.63</th> 
+  <th>???</th>
+</tr>
+</table>
