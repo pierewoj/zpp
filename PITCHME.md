@@ -34,6 +34,10 @@
 <img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
 
 ---
+
+### TO JEST MIEJSCE NA OBRAZEK NEURONU 
+
+---
 ### GENEZA PROJEKTU
 <img src="http://students.mimuw.edu.pl/~kg332118/Wybor-drogi.jpg">
 ---
