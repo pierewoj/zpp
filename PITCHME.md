@@ -41,6 +41,11 @@
 ### <img src="http://students.mimuw.edu.pl/~pp332493/CNN_layer.png">
 
 ---
+<img src="https://www.motorola.ca/sites/default/files/library/storage/compare/images/product-moto-g-5.jpg">
+<img src="http://f01.esfr.pl/foto/9/2620280922/ed3d312e9ae248c744c934193bfe45b2/siemens-kg49nai22,2620280922_7.jpg">
+<img src="http://www.bowi.com.pl/pictures/8705_0.jpg">
+
+---
 
 ### GENEZA PROJEKTU
 ### <img src="http://students.mimuw.edu.pl/~pp332493/xnornet.png">
