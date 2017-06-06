@@ -22,6 +22,19 @@
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel-step2.jpg>
 ---
 
+### ILSVRC ImageNet - Coroczna olimpiada dla komputerów
+* Rozpoznawanie obiektów
+* Lokalizowanie obiektów
+* Zadania dotyczą zarówno obrazów tudzież filmów
+* Co roku zbiór danych posiada około 1mln obrazów i 1000 klas
+
+---
+
+### ILSVRC ImageNet - Wyniki na przełomie ostatnich lat
+<img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
+
+---
+
 ### SIECI KONWOLUCYJNE
 * Trzy typy warstw: konwolucyjna, 'pooling' oraz 'fully-connected'
 * Kazdy neuron w warstwie konwolucyjnej jest polaczony z pewnym lokalnym podzbiorem danych wejsciowych.
@@ -44,6 +57,9 @@
 Glowne:
 * Weryfikacja, czy zwiekszanie ilosci feature map poprawia dokladnosc zbinaryzowanej sieci neuronowej.
 * Sprawdzenie, o ile srednio nalezy zwiekszyc te ilosc, aby osiagnac taka sama jakosc zbinaryzowanej sieci neuronowej jak oryginalnej.
+---
+
+### CELE PROJEKTU
 Poboczne:
 * Stworzenie operacji binarnej konwolucji jako operacje w Tensorflow (jedna ze zbinaryzowanymi wagami filtrow, druga ze zbinaryzowanymi wagami filtrow oraz danymi wejsciowymi).
 * Odtworzenie wynikow pracy opisanych przez tworcow XNORNET-a dla ImageNeta i AlexNeta.
@@ -79,3 +95,40 @@ Poboczne:
 * Nie ma typów bitowych w TF?? tf.boolean
 * Zgłoszenie prośby o dodanie naszej implementacji do TF
 * jakieś przejście do eksperymentów
+
+---
+
+### AlexNet na oxford-102
+<img src=http://students.mimuw.edu.pl/~as361021/AlexNet.png>
+
+---
+
+### Wyniki eksperymentów
+
+<table>
+  <tr>
+    <th><th>
+    <th>LeNet MNIST</th>
+    <th>AlexNet oxford-102</th> 
+    <th>ResNet-18 CIFAR-10</th>
+  </tr>
+  <tr>
+    <th>Basic<th>
+    <th>0.98</th>
+    <th>0.85</th> 
+    <th>0.84</th>
+  </tr>
+  <tr>
+    <th>Binary weights vector<th>
+    <th>0.98</th>
+    <th>0.71</th> 
+    <th>0.83</th>
+  </tr>
+  <tr>
+    <th>Binary weights scalar<th>
+    <th>0.98</th>
+    <th>0.63</th> 
+    <th>0.79</th>
+  </tr>
+</table>
+
