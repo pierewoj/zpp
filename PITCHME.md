@@ -61,8 +61,12 @@
 ### ILSVRC ImageNet - Wyniki na przełomie ostatnich lat
 <img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
 
+---
+
 ### AlexNet na oxford-102
 <img src=http://students.mimuw.edu.pl/~as361021/AlexNet.png>
+
+---
 
 ### Wyniki eksperymentów
 
