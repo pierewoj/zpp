@@ -72,10 +72,10 @@
 
 <table>
   <tr>
-    <th>Arch/dataset<th>
-    <th>LeNet/MNIST</th>
-    <th>AlexNet/oxford-102</th> 
-    <th>ResNet-18/CIFAR-10</th>
+    <th><th>
+    <th>LeNet MNIST</th>
+    <th>AlexNet oxford-102</th> 
+    <th>ResNet-18 CIFAR-10</th>
   </tr>
   <tr>
     <th>Basic<th>
