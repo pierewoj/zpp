@@ -80,7 +80,7 @@
     <th>0.84</th>
   </tr>
   <tr>
-    <th>Binary weights vectpr<th>
+    <th>Binary weights vector<th>
     <th>0.98</th>
     <th>0.71</th> 
     <th>0.83</th>
