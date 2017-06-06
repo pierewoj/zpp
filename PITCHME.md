@@ -73,7 +73,7 @@
     <th>AlexNet on oxford-102</th> 
     <th>ResNet-18 CIFAR-10</th>
   </tr>
-    <tr>
+  <tr>
     <th>Basic<th>
     <th>0.98</th>
     <th>0.85</th> 
@@ -85,10 +85,10 @@
     <th>0.71</th> 
     <th>0.83</th>
   </tr>
-<tr>
-  <th>Binary weights scalar<th>
-  <th>0.98</th>
-  <th>0.63</th> 
-  <th>???</th>
-</tr>
+  <tr>
+    <th>Binary weights scalar<th>
+    <th>0.98</th>
+    <th>0.63</th> 
+    <th>???</th>
+  </tr>
 </table>
