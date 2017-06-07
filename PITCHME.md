@@ -7,6 +7,9 @@
   Adam Starak<br>
 </span>
 ---
+### Sieci neuronowe
+<img src=http://students.mimuw.edu.pl/~kg332118/neurony.png>
+---
 <img src=http://students.mimuw.edu.pl/~kg332118/plakat-gotowy.jpg>
 ---
 ### Sieci neuronowe - co potrafią
@@ -32,10 +35,6 @@
 
 ### ILSVRC ImageNet - Wyniki na przełomie ostatnich lat
 <img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
-
----
-
-### TO JEST MIEJSCE NA OBRAZEK NEURONU 
 
 ---
 ### GENEZA PROJEKTU
@@ -159,4 +158,6 @@ Poboczne:
 </table>
 
 ---
-### TU JEST MIEJSCE NA OPISANIE WYNIKÓW DLA RÓŻNYCH RATE 
+### Wyniki dla większej liczby filtrów
+
+<img src=http://students.mimuw.edu.pl/~as361021/filter%20ratio.png">
