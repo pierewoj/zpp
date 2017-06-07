@@ -1,4 +1,4 @@
-#### Inference in neural networks using low-precision arithmetic
+#### Inferencja w sieciach neuronowych przy użyciu arytmetyki niskiej precyzji
 <br>
 <span style="color:gray">
   Krystyna Gajczyk<br>
@@ -58,6 +58,11 @@
 
 ### GENEZA PROJEKTU
 ### <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Intel-logo.svg/2000px-Intel-logo.svg.png">
+
+---
+
+### GENEZA PROJEKTU
+### <img src="http://students.mimuw.edu.pl/~kg332118/dd.png">
 
 ---
 
