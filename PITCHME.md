@@ -133,7 +133,7 @@ Główne:
     <th>Binary weights vector<th>
     <th>0.98</th>
     <th>0.71</th> 
-    <th>0.83</th>
+    <th>0.81</th>
   </tr>
   <tr>
     <th>Binary weights scalar<th>
