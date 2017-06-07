@@ -177,4 +177,6 @@ Poboczne:
 * Pozwala na optymalizacje, np użycie XNOR bitcount zamiast mnożenia i dodawania liczb zmiennoprzecinkowych
 * Zgłoszenie prośby o dodanie naszej implementacji do TF
 
+---
 
+### Dziękujemy za uwagę!
