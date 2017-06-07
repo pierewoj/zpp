@@ -7,10 +7,10 @@
   Adam Starak<br>
 </span>
 ---
+<img src=http://students.mimuw.edu.pl/~kg332118/plakat-gotowy.jpg>
+---
 ### Sieci neuronowe
 <img src=http://students.mimuw.edu.pl/~kg332118/neurony.png>
----
-<img src=http://students.mimuw.edu.pl/~kg332118/plakat-gotowy.jpg>
 ---
 ### Sieci neuronowe - co potrafią
 
