@@ -24,7 +24,10 @@
 
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel-step2.jpg>
 ---
+### ImageNet
 
+<img src=http://students.mimuw.edu.pl/~kg332118/imagenet.png>
+---
 ### ILSVRC ImageNet - Coroczna olimpiada dla komputerów
 * Rozpoznawanie obiektów
 * Lokalizowanie obiektów
@@ -35,6 +38,11 @@
 
 ### ILSVRC ImageNet - Wyniki na przełomie ostatnich lat
 <img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
+
+---
+### Gry Atari
+
+<img src=https://media4.s-nbcnews.com/j/newscms/2015_09/904316/best_performing_atari_de3e26c6169db55cbb4c83321cf7d9fa.nbcnews-ux-2880-1000.png>
 
 ---
 ### GENEZA PROJEKTU
