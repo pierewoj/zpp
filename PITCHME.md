@@ -84,14 +84,6 @@
 Główne:
 * Weryfikacja, czy zwiekszanie ilości feature map poprawia dokladność zbinaryzowanej sieci neuronowej.
 * Sprawdzenie, o ile średnio należy zwiekszyć tę ilość, aby osiagnąć taką samą jakość zbinaryzowanej sieci neuronowej jak oryginalnej.
----
-
-### CELE PROJEKTU
-Poboczne:
-* Stworzenie operacji binarnej konwolucji jako operacji w Tensorflow
-* Odtworzenie wynikow pracy opisanych przez tworcow XNORNET-a dla ImageNeta i AlexNeta.
-* Sprawdzenie, czy podobne działania można powtórzyć na sieciach o innych strukturach
-
 
 ---
 
@@ -102,25 +94,6 @@ Poboczne:
 * Wydajność uczenia oraz inferencji zbliżona do standardowej konwolucji
 * Używana przez nas do testów jakości klasyfikacji
 
----
-
-### Implementacja w C++
-* Utworzona nowa operacja w tensorflow
-* Dostępna z API Pythonowego tak jak inne operacje
-* Pozwala na optymalizacje, np użycie XNOR bitcount zamiast mnożenia i dodawania liczb zmiennoprzecinkowych
-* Zgłoszenie prośby o dodanie naszej implementacji do TF
----
-
-### <img src="https://wiki.tum.de/download/attachments/25009442/tensor-flow_opengraph_h.png?version=1&modificationDate=1485888308193&api=v2" width="300">
-* Otwarto-źródłowa platforma do obliczeń numerycznych rozwijana przez Google
-* Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
-* Umożliwia łatwą implementację sieci neuronowych
-* Posiada dobre wsparcie społeczności
-
-
----
-
-<img src=http://students.mimuw.edu.pl/~as361021/LeNet.png>
 
 ---
 ### UŻYTE ARCHITEKTURY
@@ -168,4 +141,35 @@ Poboczne:
 ---
 ### Wyniki dla większej liczby filtrów
 
-<img src=http://students.mimuw.edu.pl/~as361021/filter%20ratio.png">
+<img src=http://students.mimuw.edu.pl/~as361021/filter%20ratio.png>
+
+---
+
+### CELE PROJEKTU
+Poboczne:
+* Stworzenie operacji binarnej konwolucji jako operacji w Tensorflow
+* Odtworzenie wynikow pracy opisanych przez tworcow XNORNET-a dla ImageNeta i AlexNeta.
+* Sprawdzenie, czy podobne działania można powtórzyć na sieciach o innych strukturach
+
+
+---
+
+### <img src="https://wiki.tum.de/download/attachments/25009442/tensor-flow_opengraph_h.png?version=1&modificationDate=1485888308193&api=v2" width="300">
+* Otwarto-źródłowa platforma do obliczeń numerycznych rozwijana przez Google
+* Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
+* Umożliwia łatwą implementację sieci neuronowych
+* Posiada dobre wsparcie społeczności
+
+---
+
+<img src=http://students.mimuw.edu.pl/~as361021/LeNet.png>
+
+---
+
+### Implementacja w C++
+* Utworzona nowa operacja w tensorflow
+* Dostępna z API Pythonowego tak jak inne operacje
+* Pozwala na optymalizacje, np użycie XNOR bitcount zamiast mnożenia i dodawania liczb zmiennoprzecinkowych
+* Zgłoszenie prośby o dodanie naszej implementacji do TF
+
+
