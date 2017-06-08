@@ -64,25 +64,20 @@
 
 ---
 
-### BINARNA KONWOLUCJA
-### <img src="http://students.mimuw.edu.pl/~pp332493/binconv.png">
-
----
-
 ### CELE PROJEKTU
 
 Główne:
-* Weryfikacja, czy zwiekszanie ilości feature map poprawia dokladność zbinaryzowanej sieci neuronowej.
-* Sprawdzenie, o ile średnio należy zwiekszyć tę ilość, aby osiagnąć taką samą jakość zbinaryzowanej sieci neuronowej jak oryginalnej.
+* Weryfikacja wyników sieci binarnych na różnych architekturach sieci i zbiorach danych
+* Sprawdzenie, o ile średnio trzeba zwiększyć sieć dla uzyskania wyników sieci nie-binarnej
 
 ---
 
 ### Implementacja w Pythonie
-* Utworzona poprzez złożenie istniejących operacji z TensorFlow
-* Umożliwia uruchamianie na kartach graficznych oraz procesorach
-* Używa operacji na liczbach zmiennoprzecinkowych
-* Wydajność uczenia oraz inferencji zbliżona do standardowej konwolucji
-* Używana przez nas do testów jakości klasyfikacji
+* złożenie istniejących operacji z TensorFlow
+* do testów jakości klasyfikacji
+* działa na kartach graficznych oraz procesorach
+* używa operacji na liczbach zmiennoprzecinkowych
+* wydajność zbliżona do standardowej konwolucji
 
 
 ---
@@ -138,30 +133,26 @@ Główne:
 ### CELE PROJEKTU
 Poboczne:
 * Stworzenie operacji binarnej konwolucji jako operacji w Tensorflow
-* Odtworzenie wynikow pracy opisanych przez tworcow XNORNET-a dla ImageNeta i AlexNeta.
-* Sprawdzenie, czy podobne działania można powtórzyć na sieciach o innych strukturach
-
 
 ---
 
 ### <img src="https://wiki.tum.de/download/attachments/25009442/tensor-flow_opengraph_h.png?version=1&modificationDate=1485888308193&api=v2" width="300">
 * Otwarto-źródłowa platforma do obliczeń numerycznych rozwijana przez Google
 * Pozwala na wykonywanie obliczeń na procesorach oraz kartach graficznych
-* Umożliwia łatwą implementację sieci neuronowych
-* Posiada dobre wsparcie społeczności
 
 ---
 
 <img src=http://students.mimuw.edu.pl/~as361021/LeNet.png>
 
+* Umożliwia łatwą implementację sieci neuronowych
+* Posiada dobre wsparcie społeczności
+
 ---
 
 ### Implementacja w C++
 * Utworzona nowa operacja w tensorflow
-* Dostępna z API Pythonowego tak jak inne operacje
-* Pozwala na optymalizacje, np użycie XNOR bitcount zamiast mnożenia i dodawania liczb zmiennoprzecinkowych
-* Zgłoszenie prośby o dodanie naszej implementacji do TF
-
+* Pozwala na optymalizacje
+* Wkrótce dostępna dla każdego użytkownika TF
 ---
 
 ### Dziękujemy za uwagę!
