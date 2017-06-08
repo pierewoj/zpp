@@ -1,16 +1,12 @@
-#### Inferencja w sieciach neuronowych przy użyciu arytmetyki niskiej precyzji
-<br>
-<span style="color:gray">
-  Krystyna Gajczyk<br>
-  Jakub Pierewoj<br>
-  Przemysław Przybyszewski<br>
-  Adam Starak<br>
-</span>
----
 <img src=http://students.mimuw.edu.pl/~kg332118/plakat-gotowy.jpg>
 ---
+### Neurony
+<img src=http://students.mimuw.edu.pl/~kg332118/1.png>
+<img src=http://students.mimuw.edu.pl/~kg332118/2.png>
+---
+
 ### Sieci neuronowe
-<img src=http://students.mimuw.edu.pl/~kg332118/neurony.png>
+<img src=https://upload.wikimedia.org/wikipedia/commons/3/3c/Neuralnetwork.png>
 ---
 ### Sieci neuronowe - co potrafią
 
@@ -23,6 +19,10 @@
 ### Sieci neuronowe - co potrafią
 
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel-step2.jpg>
+---
+### Gry Atari
+
+<img src=https://media4.s-nbcnews.com/j/newscms/2015_09/904316/best_performing_atari_de3e26c6169db55cbb4c83321cf7d9fa.nbcnews-ux-2880-1000.png>
 ---
 ### ImageNet
 
@@ -40,11 +40,6 @@
 <img src=http://students.mimuw.edu.pl/~as361021/wykres1.png>
 
 ---
-### Gry Atari
-
-<img src=https://media4.s-nbcnews.com/j/newscms/2015_09/904316/best_performing_atari_de3e26c6169db55cbb4c83321cf7d9fa.nbcnews-ux-2880-1000.png>
-
----
 ### GENEZA PROJEKTU
 <img src="http://students.mimuw.edu.pl/~kg332118/Wybor-drogi.jpg">
 ---
@@ -56,26 +51,16 @@
 
 ---
 
-### GENEZA PROJEKTU
-### <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Intel-logo.svg/2000px-Intel-logo.svg.png">
-
----
-
-### GENEZA PROJEKTU
-### <img src="http://students.mimuw.edu.pl/~kg332118/dd.png">
-
----
-
-### GENEZA PROJEKTU
+### GENEZA PROJEKTU - sieć XORNET
 ### <img src="http://students.mimuw.edu.pl/~pp332493/xnornet.png">
 
 ---
 
 
 ### SIECI KONWOLUCYJNE
-* Trzy typy warstw: konwolucyjna, 'pooling' oraz 'fully-connected'
 * Kazdy neuron w warstwie konwolucyjnej jest polaczony z pewnym lokalnym podzbiorem danych wejsciowych.
-### <img src="http://students.mimuw.edu.pl/~pp332493/CNN_layer.png">
+* Skuteczne wykrywanie właściwości: krawędzi, kolorów itd.
+### <img src="https://ujwlkarn.files.wordpress.com/2016/08/giphy.gif?w=748">
 
 ---
 
