@@ -8,6 +8,10 @@
 ### Sieci neuronowe
 <img src=https://upload.wikimedia.org/wikipedia/commons/3/3c/Neuralnetwork.png>
 ---
+
+### DEMO - trening
+
+---
 ### Sieci neuronowe - co potrafią
 
 <img src=http://students.mimuw.edu.pl/~kg332118/Engel1.jpg>
@@ -129,4 +133,6 @@ Poboczne:
 * Wkrótce dostępna dla każdego użytkownika TF
 ---
 
+### DEMO - wyniki
+---
 ### Dziękujemy za uwagę!
