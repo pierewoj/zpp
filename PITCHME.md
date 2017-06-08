@@ -38,7 +38,7 @@
 ---
 
 ### ILSVRC ImageNet - Wyniki na przełomie ostatnich lat
-<img src=dd.png>
+<img src=https://github.com/pierewoj/zpp/blob/master/dd.png>
 
 ---
 ### GENEZA PROJEKTU
