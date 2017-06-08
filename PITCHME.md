@@ -100,7 +100,7 @@ Główne:
 
 ### Wyniki dla większej liczby filtrów
 
-<img src=http://students.mimuw.edu.pl/~as361021/filter%20ratio.png>
+<img src=http://students.mimuw.edu.pl/~as361021/filter%20ratio.png width="150%" height="150%">
 
 ---
 
