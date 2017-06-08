@@ -89,41 +89,15 @@ Główne:
 
 ---
 
+### Wyniki eksperymentów
+
+<img src=http://students.mimuw.edu.pl/~kg332118/wyniki.png>
+---
 ### AlexNet na oxford-102
 <img src=http://students.mimuw.edu.pl/~as361021/AlexNet.png>
 
 ---
 
-### Wyniki eksperymentów
-
-<table>
-  <tr>
-    <th><th>
-    <th>LeNet MNIST</th>
-    <th>AlexNet oxford-102</th> 
-    <th>ResNet-18 CIFAR-10</th>
-  </tr>
-  <tr>
-    <th>Basic<th>
-    <th>0.98</th>
-    <th>0.85</th> 
-    <th>0.84</th>
-  </tr>
-  <tr>
-    <th>Binary weights vector<th>
-    <th>0.98</th>
-    <th>0.71</th> 
-    <th>0.81</th>
-  </tr>
-  <tr>
-    <th>Binary weights scalar<th>
-    <th>0.98</th>
-    <th>0.63</th> 
-    <th>0.79</th>
-  </tr>
-</table>
-
----
 ### Wyniki dla większej liczby filtrów
 
 <img src=http://students.mimuw.edu.pl/~as361021/filter%20ratio.png>
