@@ -24,7 +24,7 @@
 \nralbumu{332118, 360641, 332493, 361021}
 \opiekun{Dr. Konrad Durnoga}
 \kierunek{COMPUTER SCIENCE}
-\klasyfikacja{ ???? }
+\klasyfikacja{  Computing methodologies - Machine learning - Machine learning approaches - Neural Networks}
 \keywords{binarized neural network, XORNET}
 \dziedzina{ 11.3 Informatics, Computer Science}
 \tytulang{Inferencja w sieciach neuronowych przy użyciu arytmetyki niskiej precyzji}
@@ -38,8 +38,6 @@ TODO
 \tableofcontents
 
 \chapter{Introduction}
-
-\krystynaintodo{akapit informujący, że to praca powstała w ramach projektu ZPP}
 	
 \section{What is deep learning and why is it interesting?}
 
@@ -47,16 +45,13 @@ Deep learning is a branch of machine learning which tries to model high level ab
 
 The most important part of deep learning is training net based on the samples that the result is known. After each training step one can change weights and activation in model to make output of the network as close as possible to the expected value.
 
-\krystynaintodo{MIEJSCE NA SŁOWNICZEK i opis co to konwolucja}
 
 Currently deep neural networks get better results than state-of-the-art algorithms in many areas, such as computer vision and speech recognition. This breakthrough was possible because computing power of modern computers is high enough to handle intensive workload required to train large artificial neural networks.
 
-	\section{Why binarized networks are interesting?}
+\section{Why binarized networks are interesting?}
 	Deep neural networks (DNN) usually use high precision (floating point) numbers to represent
 	weights and activations. Computations using that arithmetic are usually handled by
 	graphic cards. On devices with low computing power, such as mobile phones, use of deep neural networks is very limited.
-
-	\krystynaintodo{opis ile można zaoszczędzić przy różnych typach binaryzacji + inne potencjalne zyski}
 	
 	Researchers tried to address this problem in the number of papers in the recent years. A couple of main approaches have been investigated in order to reduce inefficient computation and memory usage in deep neural networks while maintaining the classification accuracy. Those approaches can be summarized as:
 
@@ -69,19 +64,24 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 	\end{itemize}
 
-	\krystynaintodo{krótkie wyjaśnienie czym jest gradient w przypadku binarnej (nieciągłej zmiennej)}
+	\krystynaintodo{wkleić tabelkę z pracy XORNET}
 
 
-	\section{What was the goal of the project?}
+	\section{Goal of the project}
 	
-	\krystynaintodo{to jest do napisania od nowa - chcemy pokazać, że sieci binarne mają przyzwoitą skuteczność oraz że dodawanie feature mapów niesie realne korzyści pozwalające na taką samą skuteczność}
+	This project was created during "Team programming project" classes in 2016/17 and was inspired by Intel.
 
-	The main goal is to analyze the results of inference, depending on 3 properties: 
+	The main goals were:  
 	\begin{itemize}
-	\item topology
-	\item weights
-	\item feature maps
+		\item to analyze the results of inference, depending on 3 properties:
+		\begin{itemize}
+			\item topology
+			\item weights
+			\item feature maps
+		\end{itemize}
+		\item to discover way to extend binarized network to achive accuracy of standard network
 	\end{itemize}
+
 
 	Each DNN has its own tolerance of inference precision. There are numerous topologies in neural networks. Each topology indicates the number layers and defines how the neurons are connected. The aim is to study the structures and predict which one will behave the best in our environment. Dealing with 1-bit integer weights is going to strongly affect the complexity of computational algorithms and the size of data. The whole workflow is going to be much faster. 1-bit operations are a way simpler than the 32-bit ones. Furthermore, the size of the inputs will require less memory. That is the perfect solution for less efficient devices. 
 	\\\\
@@ -106,15 +106,70 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\krystynaintodo{Opis implementacji w C++}
 
 	\section{Used networks and datasets}
-		\subsection{Lenet on MNIST}
-		\krystynaintodo{Opis leneta + obrazki}
-		\krystynaintodo{Opis MNISTA + obrazki}
-		\subsection{AlexNet on Flowers}
-		\krystynaintodo{Opis AlexNeta + obrazki}
-		\krystynaintodo{Opis zbioru kwiatki + obrazki}
-		\subsection{Residual network on CIFAR-10}
-		\krystynaintodo{Opis resneta + obrazki - tu koniecznie musi się pojawić pojęcie bloku}
-		\krystynaintodo{opis CIFAR + obrazki}	
+		\subsection{LeNet on MNIST}
+ 		LeNet is a small 7-level network invented by Yann LeCun et al. It is one of the most known neural network due to it’s simplicity. Almost everyone, who is new to machine learning, begins with implementing it on MNIST dataset. However, it does not mean that LeNet is not a powerful tool. According to Wikipedia, couple of banks are applying LeNet to recognise written digits on cheques. Provided implementation was highly affected by Tensorflow's tutorial. \\
+ 		\subsubsection{MNIST}
+ 			MNIST is a subset of NIST. Each example represents a handwritten digit drawn in black\&white. Examples were resized and cropped, so that each digit is centered and the size is equal to $18\times18$ pixels. The dataset is split into 2 parts: training (60,000 pictures) and test (10,000 pictures).
+ 		\subsubsection{Network architecture}
+ 			\begin{itemize}
+ 			\item Convolution layer: kernel size $5 \times 5 \times 32$
+ 			\item Max Pool layer: kernel size $2 \times 2$
+ 			\item Convolution layer: kernel size $5 \times 5 \times 64$
+ 			\item Max Pool layer: kernel size $2 \times 2$
+ 			\item Fully-connected layer: $1024$ neurons
+ 			\item Dropout layer: $0.5$
+ 			\item Fully-connected layer: $10$ neurons
+ 			\end{itemize}
+ 			\begin{figure}[h]
+				\caption{Scheme of LeNet}
+				\centering
+				\includegraphics[width=\textwidth]{LeNet}
+			\end{figure}
+ 		\subsubsection{Parameters}
+ 			\begin{itemize}
+ 			\item Weight initialization: truncated normal, stddev $0.1$
+ 			\item Optimizer: Adam Optimizer, learning rate $10^{-4}$
+ 			\item Error: softmax cross entropy with logits
+ 			\item Non-linearity: ReLU
+ 			\end{itemize}
+ 	\subsection{AlexNet on ImageNet}
+ 	AlexNet caused a huge breakthrough in deep neural networks after a great success during ImageNet Large-Scale Visual Recognition Challenge in 2012. It achieved top 5 test error rate of $15.4\%$ leaving other opponents far behind. In comparison, the next team achieved an error rate of $26.2\%$. 
+ 	\subsection{Finetuned AlexNet on oxford-102}
+ 	It has been 5 years since the astonishing victory of AlexNet, although people are still experimenting with it achieving great results. jimgoo(nick z gita, trzeba bedzie zacytowac) proposed a very clever approach of learning, which gave him a top 1 error rate of $7\%$ on oxford-102 set. In this experiment we try to replicate the results and find out whether it is possible to achieve similar accuracy using binarized network. 
+ 		\subsubsection{Oxford-flowers-102}
+ 			Oxford flowers dataset is containing the most common flowers found in United Kingdom. Each image represents a single flower. Within each class, the examples do not differ much, but there exists many similar classes, which makes the task harder. The images are saved in large scale and its’ sizes are not normalized. The dataset is split into 3 parts: test (6,149 pictures), train (1,020 images) and validation (1,020 images). In this experiment, the machine is trained on the test set and tested against the train set as the authors of CaffeNet fine-tuned on the Oxford 102 category flower dataset did.
+ 		\subsubsection{Network architecture}
+ 			\begin{itemize}
+ 			\item Convolution layer: kernel size $11 \times 11 \times 96$, learning rate $10^{-3}$
+ 			\item Max Pool layer: kernel size $3 \times 3$
+ 			\item Normalization layer
+ 			\item Convolution layer: kernel size $5 \times 5 \times 256$, learning rate $10^{-3}$
+ 			\item Max Pool layer: kernel size $3 \times 3$
+ 			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
+ 			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
+ 			\item Convolution layer: kernel size $3 \times 3 \times 256$, learning rate $10^{-3}$
+ 			\item Fully-connected layer: $4096$ neurons, learning rate $10^{-3}$
+ 			\item Dropout layer: $0.5$
+ 			\item Fully-connected layer: $102$ neurons, learning rate $10^{-2}$
+ 			\end{itemize}
+ 			\begin{figure}[h]
+				\caption{Scheme of AlexNet}
+				\centering
+				\includegraphics[width=\textwidth]{AlexNet}
+			\end{figure}
+ 		\subsubsection{Parameters}
+ 			\begin{itemize}
+ 			\item Weight initialization: pretrained on ImageNet 2012 dataset
+ 			\item Optimizer: stochastic gradient descent
+ 			\item Error: softmax cross entropy with logits
+ 			\item Non-linearity: ReLU
+			\end{itemize}
+  	\subsection{Residual network on CIFAR-10}
+		\subsubsection{CIFAR-10}
+		CIFAR-10 is one of the most popular dataset. It is used for object recognition. It includes classes such as: airplanes, automobiles, birds, cats, deers, dogs, frogs, horses, ships and trucks. This dataset contains 60,000 images of size $32\times32$. Each class is represented by 6,000 images. The dataset was created by Alex Krizhevsky, Vinod Nair and Geoffrey Hinton. There also exists a bigger dataset called CIFAR-100.
+		\krystynaintodo{obrazek, opis sieci, parametry}
+
+
 	\section{Implemented binarization algorithm}
 
 		\subsection{Binarized convolution filters from XORNET \cite{xornet}}
@@ -244,7 +299,31 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\krystynaintodo{tu opis co można zrobić jak ma się zmienną 3 bitową, co warto zbadać itd.}
 
 \chapter{Team members contribution}
-	\krystynaintodo{Podział prac}
+	\section{Krystyna's contribution}
+		\begin{itemize}
+			\item organising the team's work
+			\item contact with project supervisor
+			\item implementation of Resnet
+			\item experiments on Resnet
+		\end{itemize}
+	\section{Jakub's contribution}
+		\begin{itemize}
+			\item implementation of TensorFlow binarized convolution
+			\item experiments on Lenet
+			\item implementing C++ gradient for new operation
+		\end{itemize}
+	\section{Przemysław's contribution}
+		\begin{itemize}
+			\item contact with our partner company
+			\item implementation of TensorFlow binarized convolution
+			\item implementing qulity tests for project
+		\end{itemize}
+	\section{Adam's contribution}
+		\begin{itemize}
+			\item implementation of Alexnet
+			\item experiments on Alexnet
+			\item code review for collegues
+		\end{itemize}
 
 
 \begin{thebibliography}{99}
