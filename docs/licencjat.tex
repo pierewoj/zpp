@@ -88,6 +88,44 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	Unfortunately, those properties will negatively affect on the quality of prediction. Thus, the increase of the depth of chosen net should be also taken into consideration. A feature map is an input for the next level neurons.  The loss of data and weights precision can be alleviated by the increased number of the feature maps. We wanted to estimate ratio between number of feature maps in basic DNN and number of feature maps in low arithmetic precision DNN that maintain similar quality of the prediction.
 	 To sum up, the research may bear out, that BDNNs have some great properties, which should be investigated much deeper. It may also find out, that they achieve better results in some cases and the present solutions should be replaced with BDNN.
 
+\chapter{Dictionary}
+    For reader's convenience, we have decided to include a dictionary containing some of the terms that we use in this paper. 
+    
+    \begin{itemize}
+        \item Neural network - a machine learning model, inspired by the structure of a human brain. It consists of a large collection of neurons grouped into layers. Each neuron is connected to a set of other neurons. Each connection has an assigned value (also known as weight), which measures its importance.
+        
+        \item Inference (forward propagation) - a process of computing neural network's output based on its input and values of neuron weights.
+        
+        \item Backward propagation - a process of updating weights based on the difference between neural network output and the desired output.
+        
+         \item Activation - output of a single neuron.
+        
+        \item Training - repetitively performing inference and backward propagation until given stop condition (such as accuracy, number of iterations or lack of accuracy improvement) is met.
+               
+        \item Convolution - a mathematical function defined as follows: 
+        $$ (f* g)(t) = \int_{-\infty}^{\infty} f(t)g(t-\tau)d\tau$$ where $$f,g: R\rightarrow R$$
+        
+        \item Convolution (discrete) - a mathematical function defined as follows: 
+        $$ (f* g)(n) = \sum_{m=-\infty}^{\infty} f[m] g[n-m]$$ where $$f,g: Z\rightarrow Z$$
+        
+        \item Convolutional layer - a neural network layer which performs a discrete convolution operation between its inputs and weights (in this case they are usually called weight filters or kernels). Usage of this kind of layers proved to be successful in the field of image recognition, video recognition and natural language processing. 	
+               
+        \item Mini batch - a small subset of input data. It is usually a good practice to perform weight update after processing a mini batch instead of a single element of the training set.
+        
+        \item Batch normalization layer - a layer which returns a modification of its input such 
+        that it has zero mean and unit variance.
+        
+        \item ReLU - a neuron activation function defined as follows: $$ R(x) = max(0,x) $$
+        
+        \item Epoch - one pass over all training set.
+        
+        \item Overfitting - effect which occurs when machine learning model fits to the noise of the training sample instead of the underlying trend behind the data. It has a negative effect on the neural network performance on the real data.
+        
+        \item Regularization - set of techniques which help to reduce overfitting.
+        
+        \item Dropout layer - a layer which returns a modification of its input such that some of the values are randomly set to zero. Dropout layers are used as a regularization technique.   
+    \end{itemize}
+
 \chapter{Architecture overview}
 
 	\section{Used framework}
@@ -324,7 +362,6 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			\item experiments on Alexnet
 			\item code review for collegues
 		\end{itemize}
-
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
