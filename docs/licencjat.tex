@@ -205,7 +205,35 @@ Currently deep neural networks get better results than state-of-the-art algorith
   	\subsection{Residual network on CIFAR-10}
 		\subsubsection{CIFAR-10}
 		CIFAR-10 is one of the most popular dataset. It is used for object recognition. It includes classes such as: airplanes, automobiles, birds, cats, deers, dogs, frogs, horses, ships and trucks. This dataset contains 60,000 images of size $32\times32$. Each class is represented by 6,000 images. The dataset was created by Alex Krizhevsky, Vinod Nair and Geoffrey Hinton. There also exists a bigger dataset called CIFAR-100.
-		\krystynaintodo{obrazek, opis sieci, parametry}
+		\subsubsection{Network architecture}
+		Resnet is constructed using blocks. Every block($num\_filters$, $size\_filters$) contains:
+		\begin{itemize}
+			\item Normalization layer
+			\item Convolution layer with $num\_filters$ of $size\_filters$ size
+			\item Normalization layer
+			\item Convolution layer with $num\_filters$ of $size\_filters$ size
+			\item Identity connection which adds input to output of second convolution
+		\end{itemize}
+		\krystynaintodo{obrazek}
+		We use blocks to construct Resnet(n) in a following way:
+		\begin{itemize}
+			\item convolutional layer of size matching input of network (for CIFAR it is 32)
+			\item n blocks(16,32)
+			\item pool
+			\item n blocks(32,16)
+			\item pool
+			\item n blocks(64,8)
+			\item normalization 
+			\item pool
+		\end{itemize}
+		\krystynaintodo{obrazek}
+		\subsubsection{Parameters}
+			\begin{itemize}
+ 			\item Weight initialization: XAVIER initializer
+ 			\item Optimizer: momentum 
+ 			\item Error: softmax cross entropy with logits
+ 			\item Non-linearity: ReLU
+			\end{itemize}
 
 
 	\section{Implemented binarization algorithm}
@@ -265,27 +293,26 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\subsection{Results and discussion}
 			\subsubsection{Binary Resnet XORNET style}
 		        \paragraph{Results} 
-		        
-		        
-		        The results of experiments are in table \krystynaintodo{nauczyć się numerować tabele}.
+		     
+		        The results of experiments are in table \ref{table:1}.
 		        \begin{table}[H]
-		                        \caption{Results of Resnet and BinResnet}
-		                        \centering
-		                        \begin{tabular}{c c c c c c}
-		                        \hline\hline
-		                        blocks & layers & epochs & learning rate & ResNet & BinResNet  \\ [0.5ex]
-		                        \hline
-		                                2 & 14  & 0.1   & 15 & 80\% & 77\% \\
-		                                5 & 32  & 0.1   & 15 & 82\% & 81\% \\
-		                                18& 110 & 0.1   & 20 & 84\% & 82\%\\
-		                        \hline
-		                                2 & 14  & 0.01  & 15 & 78\% & 76\% \\
-		                                5 & 32  & 0.01  & 15 & 79\% & 78\% \\
-		                                18 & 110 & 0.01 & 20 & 81\% & 80\% \\
-		                        \hline
-		                        \end{tabular}
-		                        \label{table:nonlin}
-		                \end{table}
+                    \caption{Results of Resnet and BinResnet}
+                    \centering
+                    \begin{tabular}{c c c c c c}
+                    \hline\hline
+                    blocks & layers & epochs & learning rate & ResNet & BinResNet  \\ [0.5ex]
+                    \hline
+                            2 & 14  & 0.1   & 15 & 80\% & 77\% \\
+                            5 & 32  & 0.1   & 15 & 82\% & 81\% \\
+                            18& 110 & 0.1   & 20 & 84\% & 82\%\\
+                    \hline
+                            2 & 14  & 0.01  & 15 & 78\% & 76\% \\
+                            5 & 32  & 0.01  & 15 & 79\% & 78\% \\
+                            18 & 110 & 0.01 & 20 & 81\% & 80\% \\
+                    \hline
+                    \end{tabular}
+                    \label{table:1}
+	            \end{table}
 
 		        \paragraph{Discussion} 
 
@@ -293,35 +320,35 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 
 		\subsubsection{Binary Resnet DoReFa style}
-		        \paragraph{Results} 
-		        The results of experiments are included in table below. \krystynaintodo{nauczyć się ładnie formatować tabele w latexie}
-		        \begin{table}[H]
-		                        \caption{Results of Resnet and BinResnet}
-		                        \centering
-		                        \begin{tabular}{c c c c c c c}
-		                        \hline\hline
-		                        blocks & layers & epochs & learning rate & ResNet & BinResNet & BinResnet more epochs  \\ [0.5ex]
-		                        \hline
-		                                2 & 14  & 0.1   & 15 & 80\% & 77\% & 78\% (25 epochs) \\
-		                                5 & 32  & 0.1   & 15 & 82\% & 75\% & 8\% (40 epochs) \\
-		                                18      & 110 & 0.1     & 20 & 84\% & 79\% & 80\% (40 epochs)\\
-		                        \hline
-		                                2 & 14  & 0.01  & 15 & 78\% & 61\% & 65\%(25 epochs) \\
-		                                5 & 32  & 0.01  & 15 & 79\% & 63\% & 67\% (25 epochs) \\
-		                                18 & 110 & 0.01 & 20 & 81\% & 62\% & 67\% (40 epochs) \\
-		                        \hline
-		                        \end{tabular}
-		                        \label{table:nonlin}
-		        \end{table}
+	        \paragraph{Results} 
+	        The results of experiments are included in table \ref{table:nonlin2}. 
+	        \begin{table}[H]
+                \caption{Results of Resnet and BinResnet}
+                \centering
+                \begin{tabular}{c c c c c c c}
+                \hline\hline
+                blocks & layers & learning rate & epochs & ResNet & BinResnet & epochs  \\ [0.5ex]
+                \hline
+                        2 & 14  & 0.1   & 15 & 80\% & 78\% & 25 \\
+                        5 & 32  & 0.1   & 15 & 82\% & 80\% & 40 \\
+                        18& 110 & 0.1   & 20 & 84\% & 80\% & 40 \\
+                \hline
+                        2 & 14  & 0.01  & 15 & 78\% & 65\% & 25 \\
+                        5 & 32  & 0.01  & 15 & 79\% & 67\% & 25 \\
+                        18 & 110 & 0.01 & 20 & 81\% & 67\% & 40 \\
+                \hline
+                \end{tabular}
+                \label{table:nonlin2}
+	        \end{table}
 
 		        \paragraph{Discussion} 
-		                The network with binarization which takes average over all filters is affected more easily by changes in model parameters. For smaller learning rates it learns quite slow, achieving around 75\% of accuracy compared to classical resnet in same number of epochs. It has a potencial for longer training - training it for more than 40 epochs can generate accuracy around 0.8. 
-		                \\\\
-		                Of course it is faster than XORNET implementation, but because it requires more training and gets lower accuracy, one must decide if this is good approach based on available computation machine. For testing on personal laptop, XORNET is better solution.
+	                The network with binarization which takes average over all filters is affected more easily by changes in model parameters. For smaller learning rates it learns quite slow, achieving around 75\% of accuracy compared to classical resnet in same number of epochs. It has a potencial for longer training - training it for more than 40 epochs can generate accuracy around 0.8. 
+	                \\\\
+	                Of course it is faster than XORNET implementation, but because it requires more training and gets lower accuracy, one must decide if this is good approach based on available computation machine. For testing on personal laptop, XORNET is better solution.
 
 			\subsubsection{Binary Resnet with binary weights and activation}
 			        \paragraph{Results} 
-			        \krystynaintodo{zdebugować kod i puścić eksperymenty jeszcze raz}
+			        \krystynaintodo{eksperymenty Adama}
 			        \paragraph{Discussion} 
 			        
 			        \begin{itemize}
