@@ -361,7 +361,13 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	\section{Discussion of experiments results}
 		\krystynaintodo{tu opis wspólnych konkluzji dla wszystkich eksperymentów}
 	\section{Future work}
-		\krystynaintodo{tu opis co można zrobić jak ma się zmienną 3 bitową, co warto zbadać itd.}
+		There are a couple of things, that could be further analyzed or added, namely:
+		\begin{itemize}
+			\item Right now only three ANN structures were tested. Those experiments could be extended to include also other popular structures such as GoogLeNet, VGG Net and ZF Net.
+			\item Kernels in C++ are designed only for CPU. For potential speed-up gain new implementations of those operations on GPU could be added. 
+			\item The current C++ implementation for binarizing both inputs and filter's weights is not saving any memory (it is using as much memory as the standard convolution operation). This could be improved by adding support for one or two bit types. 
+			\item Right now it was only checked, how much the binarized network needs to be extended to achive the accuracy of its standard version. It could be also checked, what is the limit of achievable accuracy for the binarized networks and how many iterations are required to achieve the maximal accuracy on a given dataset.
+		\end{itemize} 
 
 \chapter{Team members contribution}
 	\section{Krystyna's contribution}
