@@ -130,12 +130,16 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 	\section{Used framework}
 
-		We decided to work with one of open source framework that can be used for neural networks. The structure of BNN proposed in Binary Connect \cite{binaryConnect} and XORNET \cite{xornet} is very similar to standard convolutional network so there is no need to implement BNN from scratch. 
+		We decided to work with one of open source framework that can be used for neural networks. The structure of BNN proposed in Binary Connect \cite{binaryConnect} and XORNET \cite{xornet} is very similar to the standard convolutional network, so there is no need to implement BNN from scratch. 
 		
-		All frameworks that we analyse (TensorFlow, Torch, Caffe) have similar functionalities, for example they have already implemented pooling and affine layers so we can easily reuse them. 
+		All frameworks that we analyze (TensorFlow, Torch, Caffe) have similar functionality, for example they have already implemented pooling and affine layers so we can easily reuse them. 
 
 		From available frameworks we decided to choose TensorFlow \cite{tensorFlow}. It is an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (called tensors) transported between them. In case on of neural networks, nodes will represent layers of network. 
 		The advantage of TensorFlow over other frameworks is really good community support and solid documentation.
+		
+		To perform our experiments more efficiently, we have used a higher level API for TensorFlow: TFLearn, which is a great tool for fast prototyping and creating proofs of concepts. It also provides great features for neural network visualization, such as weights plotting.
+		
+		Our next tool was Jupyter notebook, which enabled us to write and share code more easily and made us more productive. We shared these notebooks and worked on them together using GitHub - a popular software development platform.
 
 	\section{Our implementation}
 
@@ -409,4 +413,3 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 
 \end{document}
-
