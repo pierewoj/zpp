@@ -145,7 +145,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 		\subsection{Implementation in Python}
 		\subsection{Implementation in C++}
-		It is possible in Tensorflow framework to add a so-called core user-defined operation to the already existing ones. To support binary convolution two operations were added, namely BinaryConv2D, which binarizes only filter weights, and BinaryConvInput2D binarizing both inputs and filters' weights. Those were implemented in source files conv_bin.cc and conv_bin_inputs.cc respectively. Source files were added to the /tensorflow/core/user_ops directory.
+		It is possible in Tensorflow framework to add a so-called core user-defined operation to the already existing ones. To support binary convolution two operations were added, namely BinaryConv2D, which binarizes only filter weights, and BinaryConvInput2D binarizing both inputs and filters' weights. Those were implemented in source files conv\_bin.cc and conv\_bin\_inputs.cc respectively. Source files were added to the \/tensorflow\/core\/user\_ops directory.
 
 		First part of both kernel implenetations is validation of user provided data e.g. checking whether filter's and input's depth are equal and whether the strides attributes is well-defined.
 
@@ -155,9 +155,9 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	
 		The last action is the binarized convolution. After binarizing the appropriate parts on data the resulting output of the convolution is multiplied by the corresponding 'alpha' and 'beta' parameters. Also in this case the operation was implemented in a way, that its calculation could be shared by all available CPU cores.
 
-		Both implementations follow a typical scheme of a Tensorflow operation. They consist of two sections - in one an operation is being declared (REGISTER_OP) and in the second one the registered operation is being linked to the given kernel, that works on specific types and on a specific device (REGISTER_KERNEL_BUILDER). Our both implementations work only on CPU and on float types. 
+		Both implementations follow a typical scheme of a Tensorflow operation. They consist of two sections - in one an operation is being declared (REGISTER\_OP) and in the second one the registered operation is being linked to the given kernel, that works on specific types and on a specific device (REGISTER\_KERNEL\_BUILDER). Our both implementations work only on CPU and on float types. 
 
-		A special build script was added, that was compiling our source files into a shared object file, which then was manually added in our Python tests and programs by a special Tensorflow call 'load_op_library'.
+		A special build script was added, that was compiling our source files into a shared object file, which then was manually added in our Python tests and programs by a special Tensorflow call 'load\_op\_library'.
 
 		In order to test if the kernels computations are correct, unit tests were added to the library. Those tests are run every time the shared object file is being created.
 	\section{Used networks and datasets}
