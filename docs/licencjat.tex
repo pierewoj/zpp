@@ -1,4 +1,4 @@
-\documentclass[licencjacka]{pracamgr}
+	\documentclass[licencjacka]{pracamgr}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
@@ -139,10 +139,23 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 	\section{Our implementation}
 
-		\krystynaintodo{Opis implementacji w pythonie}
-		\krystynaintodo{Opis pythonowego opa}
-		\krystynaintodo{Opis implementacji w C++}
+		\subsection{Implementation in Python}
+		\subsection{Implementation in C++}
+		It is possible in Tensorflow framework to add a so-called core user-defined operation to the already existing ones. To support binary convolution two operations were added, namely BinaryConv2D, which binarizes only filter weights, and BinaryConvInput2D binarizing both inputs and filters' weights. Those were implemented in source files conv_bin.cc and conv_bin_inputs.cc respectively. Source files were added to the /tensorflow/core/user_ops directory.
 
+		First part of both kernel implenetations is validation of user provided data e.g. checking whether filter's and input's depth are equal and whether the strides attributes is well-defined.
+
+		Second part is where the calculation of binarized convolution is being conducted. Its design follows the algorithms described in section \ref{binarization_algorithm}. In both added operations a parameter 'alpha' is being calculated. The speed-up in its calculation was gained by using OpenMPI library and dividing the work of calculating summation of absolute values of filter's weights across all existing CPU cores.
+
+		In the BinaryConvInput2D kernel operation also calculation of parameter 'beta' is conducted. This required calculating averaged inputs accross channels and for each output's cell calculating an appropriate 'beta' parameter. Those parameters are being stored in a matrix 'K', which name was suggested in the referenced paper. Also in this case some speed-ups were implemented. In a naive implementation, calculation of matrix 'K' was doing repeated operations of calculating a sum over the same subset of input data. To avoid summing the same elements many times, a dynamic programming approach was used, in which the incremental sums are stored in a designated matrix 'D'.
+	
+		The last action is the binarized convolution. After binarizing the appropriate parts on data the resulting output of the convolution is multiplied by the corresponding 'alpha' and 'beta' parameters. Also in this case the operation was implemented in a way, that its calculation could be shared by all available CPU cores.
+
+		Both implementations follow a typical scheme of a Tensorflow operation. They consist of two sections - in one an operation is being declared (REGISTER_OP) and in the second one the registered operation is being linked to the given kernel, that works on specific types and on a specific device (REGISTER_KERNEL_BUILDER). Our both implementations work only on CPU and on float types. 
+
+		A special build script was added, that was compiling our source files into a shared object file, which then was manually added in our Python tests and programs by a special Tensorflow call 'load_op_library'.
+
+		In order to test if the kernels computations are correct, unit tests were added to the library. Those tests are run every time the shared object file is being created.
 	\section{Used networks and datasets}
 		\subsection{LeNet on MNIST}
  		LeNet is a small 7-level network invented by Yann LeCun et al. It is one of the most known neural network due to it’s simplicity. Almost everyone, who is new to machine learning, begins with implementing it on MNIST dataset. However, it does not mean that LeNet is not a powerful tool. According to Wikipedia, couple of banks are applying LeNet to recognise written digits on cheques. Provided implementation was highly affected by Tensorflow's tutorial. \\
@@ -236,7 +249,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			\end{itemize}
 
 
-	\section{Implemented binarization algorithm}
+	\section{Implemented binarization algorithm} \label{binarization_algorithm}
 
 		\subsection{Binarized convolution filters from XORNET \cite{xornet}}
 
