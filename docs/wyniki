@@ -1,0 +1,10 @@
+LeNet - 98.7
+LeNet-weights - 98.2
+LeNet-activ - 95.2
+
+AlexNet flowers17 top1 - 76.4 top5 - 98.5
+AlexNet flowers17 weights top1 - 75.7 top-5 99.2
+AlexNet flowers17 activ top1 - 61 top-5 91.9
+
+AlexNet flowers-102 - 85.9
+AlexNet flowers-102 weights - 72.2
