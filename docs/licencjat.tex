@@ -303,9 +303,60 @@ Currently deep neural networks get better results than state-of-the-art algorith
 \chapter{Experiments results}
 
 	\section{Lenet on MNIST}
-		\krystynaintodo{wyniki}
+		\subsection{Results and discussion}
+		        \paragraph{Results} 
+		     
+		        The results of experiments are in table \ref{table:1}.
+		        \begin{table}[H]
+                    \caption{LeNet binarization on MNIST}
+                    \centering
+                    \begin{tabular}{c c c c c c}
+                    \hline\hline
+			    Full-precision & Binary weights & Binary weights \& inputs \\ [0.5ex]
+                    \hline
+			    98\% & 98\% & 95\% \\
+                    \hline
+                    \end{tabular}
+                    \label{table:1}
+	            \end{table}
+		        \paragraph{Discussion} 
+			Both binarization methods acquired near state-of-the-art scores. The MNIST dataset is really simple and the LeNet structure is not complicated. Thus, the binarization does not significantly affect on the precision. The results are not surprising nor ground-braking. We made this experiment mostly for verifying our binarization methods.
 	\section{AlexNet on Flowers}
-		\krystynaintodo{wyniki}
+		\subsection{Binarization results and discussion}
+		        The results of experiments are in table \ref{table:1}.
+		        \begin{table}[H]
+				\caption{AlexNet on flowers-17 (50 epochs)}
+                    \centering
+                    \begin{tabular}{c c c c c c}
+                    \hline\hline
+			    Accuracy & Full-precision & Binary weights & Binary weights \& inputs \\ [0.5ex]
+                    \hline
+			    top-1 & 76\% & 75\% & 61\% \\
+                    \hline
+			    top-5 & 98\% & 99\% & 91\% \\
+                    \hline
+                    \end{tabular}
+                    \label{table:1}
+	            \end{table}
+		        \paragraph{Discussion} 
+                        The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not lose as much precision as it was expected. Surprisngly, there is only slight difference between full-precision and binary weights network.
+		\subsection{Fine-tuning results and discussion}
+		     
+		        The results of experiments are in table \ref{table:1}.
+		        \begin{table}[H]
+                    \caption{Fine-tuning AlexNet on flowers-102}
+                    \centering
+                    \begin{tabular}{c c c c c c}
+                    \hline\hline
+			    Full-precision & Binary weights \\ [0.5ex]
+                    \hline
+			    85\% & 72\% \\
+                    \hline
+                    \end{tabular}
+                    \label{table:1}
+	            \end{table}
+		        \paragraph{Discussion} 
+			This experiment shows that binarized networks achieve near state-of-the-art performance also with pretrained weights, which were not trained on binarized network.
 	\section{Residual network on CIFAR-10}
 		\subsection{Results and discussion}
 			\subsubsection{Binary Resnet XORNET style}
@@ -317,7 +368,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
                     \centering
                     \begin{tabular}{c c c c c c}
                     \hline\hline
-                    blocks & layers & epochs & learning rate & ResNet & BinResNet  \\ [0.5ex]
+                    blocks & layers & learning rate & epochs & ResNet & BinResNet  \\ [0.5ex]
                     \hline
                             2 & 14  & 0.1   & 15 & 80\% & 77\% \\
                             5 & 32  & 0.1   & 15 & 82\% & 81\% \\
