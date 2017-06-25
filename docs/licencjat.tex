@@ -66,27 +66,22 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 	\krystynaintodo{wkleić tabelkę z pracy XORNET}
 
-
-	\section{Goal of the project}
-	
-	This project was created during "Team programming project" classes in 2016/17 and was inspired by Intel.
-
-	The main goals were:  
-	\begin{itemize}
-		\item to analyze the results of inference, depending on 3 properties:
-		\begin{itemize}
-			\item topology
-			\item weights
-			\item feature maps
-		\end{itemize}
-		\item to discover way to extend binarized network to achive accuracy of standard network
-	\end{itemize}
-
-
-	Each DNN has its own tolerance of inference precision. There are numerous topologies in neural networks. Each topology indicates the number layers and defines how the neurons are connected. The aim is to study the structures and predict which one will behave the best in our environment. Dealing with 1-bit integer weights is going to strongly affect the complexity of computational algorithms and the size of data. The whole workflow is going to be much faster. 1-bit operations are a way simpler than the 32-bit ones. Furthermore, the size of the inputs will require less memory. That is the perfect solution for less efficient devices. 
+	Each DNN has its own tolerance of inference precision. There are numerous topologies of neural networks. Each topology indicates the number of layers and defines how the neurons are connected. The aim of this project is to study the structures and predict which one will behave the best in our environment. Dealing with 1-bit integer weights is going to strongly affect the complexity of computational algorithms and the size of data. The whole workflow is going to be much faster. 1-bit operations are way simpler than the 32-bit ones. Furthermore, the size of the inputs will require less memory. That is the perfect solution for less efficient devices. 
 	\\\\
-	Unfortunately, those properties will negatively affect on the quality of prediction. Thus, the increase of the depth of chosen net should be also taken into consideration. A feature map is an input for the next level neurons.  The loss of data and weights precision can be alleviated by the increased number of the feature maps. We wanted to estimate ratio between number of feature maps in basic DNN and number of feature maps in low arithmetic precision DNN that maintain similar quality of the prediction.
-	 To sum up, the research may bear out, that BDNNs have some great properties, which should be investigated much deeper. It may also find out, that they achieve better results in some cases and the present solutions should be replaced with BDNN.
+	Unfortunately, those properties will negatively affect the quality of prediction. Thus, the increase of the depth of chosen net should be also taken into consideration. A feature map is an input for the next level neurons.  The loss of data and weights precision can be alleviated by the increased number of the feature maps. We wanted to estimate ratio between number of feature maps in basic DNN and number of feature maps in low arithmetic precision DNN that maintain similar quality of the prediction.
+	 To sum up, the research may bear out, that BDNNs have some great properties, which should be investigated much deeper. It may also find out, that they achieve better results in some cases and the present solutions should be replaced with BDNN.    
+
+	\section{Our contribution}
+	
+	This project was created during "Team programming project" classes in 2016/17 and was proposed by Intel. Main goal of this project is the analysis of the effect that neural network binarization has on the inference quality of inference depending on:
+	\begin{itemize}
+	    \item network topology (LENET, ResNet, AlexNet)
+	    \item level of binarization (weights or weights and inputs)
+	\end{itemize}
+	
+	We have also tested if it is possible to achieve same accuracy as standard neural networks, which use floating point values, just by increasing the number of filters in convolutional layers.
+	
+	In addition to the main goal of this project, we have also added a binary convolution operation to TensorFlow.
 
 \chapter{Dictionary}
     For reader's convenience, we have decided to include a dictionary containing some of the terms that we use in this paper. 
