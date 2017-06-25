@@ -64,8 +64,6 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 	\end{itemize}
 
-	\krystynaintodo{wkleić tabelkę z pracy XORNET}
-
 	Each DNN has its own tolerance of inference precision. There are numerous topologies of neural networks. Each topology indicates the number of layers and defines how the neurons are connected. The aim of this project is to study the structures and predict which one will behave the best in our environment. Dealing with 1-bit integer weights is going to strongly affect the complexity of computational algorithms and the size of data. The whole workflow is going to be much faster. 1-bit operations are way simpler than the 32-bit ones. Furthermore, the size of the inputs will require less memory. That is the perfect solution for less efficient devices. 
 	\\\\
 	Unfortunately, those properties will negatively affect the quality of prediction. Thus, the increase of the depth of chosen net should be also taken into consideration. A feature map is an input for the next level neurons.  The loss of data and weights precision can be alleviated by the increased number of the feature maps. We wanted to estimate ratio between number of feature maps in basic DNN and number of feature maps in low arithmetic precision DNN that maintain similar quality of the prediction.
@@ -120,8 +118,187 @@ Currently deep neural networks get better results than state-of-the-art algorith
         
         \item Dropout layer - a layer which returns a modification of its input such that some of the values are randomly set to zero. Dropout layers are used as a regularization technique.   
     \end{itemize}
+\chapter{Implemented binarization algorithms}
+	\section{Binarized convolution filters from XORNET \cite{xornet}}
 
-\chapter{Architecture overview}
+        In this approach we use special binarized filter for forward propagation.
+        \\\\
+        For an original filter $W$ forward propagation is:
+        \begin{enumerate}
+                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
+                \item Let $W'$ be matrix containing signs of $W$.
+                \item Calculate $A$ - average of elements for each filter in $W'$, so $A$ is a vector of size equal to number of filters in layer.
+                \item Compute standard convolution using matrix $W'$.
+                \item Return result of convolution multiplied by $A$.
+        \end{enumerate}
+        The back propagation is standard back-propagation made by using original W matrix. To achieve this result we override standard gradient to change sign to identity.
+        \\\\
+        In this type of binarizations, the gradients are in full precision, therefore the backward-pass still requires convolution between 1-bit numbers and 32-bit floating-points.
+		\section{Binarized convolution filters inspired by DoReFa \cite{dorefa}}
+
+		        In this approach we do not implement full methods from DoReFa network. We worked on one idea to average filters over all maps at the same time. It is very similar to XORNET scheme. 
+		        \\\\
+		        TODO - opis dokładniejszy co analizuje DoReFa 
+		        \\\\
+		        For original filter $W$ forward propagation is:
+		        \begin{enumerate}
+		                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
+		                \item Let $W'$ be matrix containing signs of $W$.
+		                \item Calculate $A$ average of elements for all filters in $W$, so $A$ is a scalar.
+		                \item Compute standard convolution using matrix $W'$.
+		                \item Return result of convolution multiplied by $A$.
+		        \end{enumerate}
+
+		        The only difference is that $A$ is now scalar, not a vector. This approach allows to speed up computation for both forward and back propagation (multiplication by scalar is very efficient) comparing to XORNET.
+
+		\section{Binarized filters and activations}
+		        For original filter W and input I forward propagation is:
+		        \begin{enumerate}
+		                \item Let n be the number of elements in each filter, e.g. if filter is matrix 3x3, n=9.
+		                \item Let $W_{sign}$ be matrix containing signs of W divided by A.
+		                \item Calculate A average of elements for each filter in $W_{sign}$, so A is a vector of size equal to numbers of filters in layer.
+		                \item Let $I_{abs}$ be matrix with absolute value of input.
+		                \item Let $I_{sign}$ be matrix with signs of input.
+		                \item Let $K$ to be result of computation of standard convolution using as input $I_{abs}$ and as weights matrix containing $\frac{1}{n}$ on each position.
+		                \item Compute standard convolution using input $I_{sign}$ and weights $W_{sign}$.
+		                \item Return result multiplied by $K$ and $A$.
+		        \end{enumerate}
+
+	\chapter{Advantages of binarized neural network}
+    One of the advantages of using binarized neural networks is that we can save trained weights as binary numbers and store them on a device with limited resources. In this section, it is discussed exactly how much space we can save, when using different kinds of binarization.
+    
+    \section{Binarized weights}
+        In this case we store binary value instead of a floating point for each weight. In addition, we also need to store coefficients $\alpha$ which are floating point numbers. The amount of these coefficients depends on the type of binarization we perform. Computing $\alpha$ for each kernel compared to computing it foe each layer gives us slightly worse space and computation time savings, but yields better accuracy.
+        
+        General formula for space savings is as follows (assuming we use 32 bit floating point numbers):
+        $$s_m =  \frac{space_{bin}}{space_{float}} = \frac{\#_\alpha * 32bit + \#_{weights}*1bit}{\#_{weights} * 32bit} $$
+        
+        \subsection{Different $\alpha$ for each layer }
+        In this case $\#_\alpha = \#_{layers}$. So in in LENET, where $\#_{layers} = 4$ and $\#_{weights} = 1642272$ we have $s_m = 1/(31.9975)$.
+        
+        \subsection{Different $\alpha$ for each kernel }
+        In this case we have $\#_\alpha = \#_{kernels}$. To compute the space savings for LENET model, we can observe that the number of weights is same as above, but $\#_\alpha = 32+32+1024+10 = 1098$, so $s_m = 1/(31.3297)$.
+	    
+	    \section{Binarized inputs and weights (XNORNET)}
+	    Using this kind of binarization gives same savings as binarized weights, as we have to compute all $\beta$ coefficients during inference (they are not saved). Still, the space gain is around 32x which is an excellent result.
+
+\chapter{Used networks and datasets}
+		\section{LeNet on MNIST}
+ 		LeNet is a small 7-level network invented by Yann LeCun et al. It is one of the most known neural network due to it’s simplicity. Almost everyone, who is new to machine learning, begins with implementing it on MNIST dataset. However, it does not mean that LeNet is not a powerful tool. According to Wikipedia, couple of banks are applying LeNet to recognise written digits on cheques. Provided implementation was highly affected by Tensorflow's tutorial. \\
+ 		\subsection{MNIST}
+ 			MNIST is a subset of NIST. Each example represents a handwritten digit drawn in black\&white. Examples were resized and cropped, so that each digit is centered and the size is equal to $18\times18$ pixels. The dataset is split into 2 parts: training (60,000 pictures) and test (10,000 pictures).
+ 			\begin{figure}[h]
+				\caption{Examples of MNIST pictures}
+				\centering
+				\includegraphics[width=\textwidth]{images/mnist}
+			\end{figure}
+ 		\subsection{Network architecture}
+ 			\begin{itemize}
+ 			\item Convolution layer: kernel size $5 \times 5 \times 32$
+ 			\item Max Pool layer: kernel size $2 \times 2$
+ 			\item Convolution layer: kernel size $5 \times 5 \times 64$
+ 			\item Max Pool layer: kernel size $2 \times 2$
+ 			\item Fully-connected layer: $1024$ neurons
+ 			\item Dropout layer: $0.5$
+ 			\item Fully-connected layer: $10$ neurons
+ 			\end{itemize}
+ 			\begin{figure}[h]
+				\caption{Scheme of LeNet}
+				\centering
+				\includegraphics[width=\textwidth]{LeNet}
+			\end{figure}
+ 		\subsection{Parameters}
+ 			\begin{itemize}
+ 			\item Weight initialization: truncated normal, stddev $0.1$
+ 			\item Optimizer: Adam Optimizer, learning rate $10^{-4}$
+ 			\item Error: softmax cross entropy with logits
+ 			\item Non-linearity: ReLU
+ 			\end{itemize}
+ 	\section{AlexNet on ImageNet}
+ 	AlexNet caused a huge breakthrough in deep neural networks after a great success during ImageNet Large-Scale Visual Recognition Challenge in 2012. It achieved top 5 test error rate of $15.4\%$ leaving other opponents far behind. In comparison, the next team achieved an error rate of $26.2\%$. 
+ 	\section{Finetuned AlexNet on oxford-102}
+ 	It has been 5 years since the astonishing victory of AlexNet, although people are still experimenting with it achieving great results. jimgoo(nick z gita, trzeba bedzie zacytowac) proposed a very clever approach of learning, which gave him a top 1 error rate of $7\%$ on oxford-102 set. In this experiment we try to replicate the results and find out whether it is possible to achieve similar accuracy using binarized network. 
+ 		\subsection{Oxford-flowers-102}
+ 			Oxford flowers dataset is containing the most common flowers found in United Kingdom. Each image represents a single flower. Within each class, the examples do not differ much, but there exists many similar classes, which makes the task harder. The images are saved in large scale and its’ sizes are not normalized. The dataset is split into 3 parts: test (6,149 pictures), train (1,020 images) and validation (1,020 images). In this experiment, the machine is trained on the test set and tested against the train set as the authors of CaffeNet fine-tuned on the Oxford 102 category flower dataset did.
+ 			\begin{figure}[h]
+				\caption{Examples of Oxford-flowers-102 pictures}
+				\centering
+				\includegraphics[width=\textwidth]{images/flowers}
+			\end{figure}
+ 		\subsection{Network architecture}
+ 			\begin{itemize}
+ 			\item Convolution layer: kernel size $11 \times 11 \times 96$, learning rate $10^{-3}$
+ 			\item Max Pool layer: kernel size $3 \times 3$
+ 			\item Normalization layer
+ 			\item Convolution layer: kernel size $5 \times 5 \times 256$, learning rate $10^{-3}$
+ 			\item Max Pool layer: kernel size $3 \times 3$
+ 			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
+ 			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
+ 			\item Convolution layer: kernel size $3 \times 3 \times 256$, learning rate $10^{-3}$
+ 			\item Fully-connected layer: $4096$ neurons, learning rate $10^{-3}$
+ 			\item Dropout layer: $0.5$
+ 			\item Fully-connected layer: $102$ neurons, learning rate $10^{-2}$
+ 			\end{itemize}
+ 			\begin{figure}[h]
+				\caption{Scheme of AlexNet}
+				\centering
+				\includegraphics[width=\textwidth]{AlexNet}
+			\end{figure}
+ 		\subsection{Parameters}
+ 			\begin{itemize}
+ 			\item Weight initialization: pretrained on ImageNet 2012 dataset
+ 			\item Optimizer: stochastic gradient descent
+ 			\item Error: softmax cross entropy with logits
+ 			\item Non-linearity: ReLU
+			\end{itemize}
+  	\section{Residual network on CIFAR-10}
+		\subsection{CIFAR-10}
+		CIFAR-10 is one of the most popular dataset. It is used for object recognition. It includes classes such as: airplanes, automobiles, birds, cats, deers, dogs, frogs, horses, ships and trucks. This dataset contains 60,000 images of size $32\times32$. Each class is represented by 6,000 images. The dataset was created by Alex Krizhevsky, Vinod Nair and Geoffrey Hinton. There also exists a bigger dataset called CIFAR-100.
+		\begin{figure}[h]
+				\caption{Examples of CIFAR-10 pictures}
+				\centering
+				\includegraphics[width=\textwidth]{images/cifar-10}
+			\end{figure}
+		\subsection{Network architecture}
+		Resnet is constructed using blocks. Every block($num\_filters$, $size\_filters$) contains:
+		\begin{itemize}
+			\item Normalization layer
+			\item Convolution layer with $num\_filters$ of $size\_filters$ size
+			\item Normalization layer
+			\item Convolution layer with $num\_filters$ of $size\_filters$ size
+			\item Identity connection which adds input to output of second convolution
+		\end{itemize}
+		\begin{figure}[h]
+		\caption{TODO schemat bloku}
+				\centering
+				\includegraphics[width=\textwidth]{AlexNet}
+		\end{figure}
+		We use blocks to construct Resnet(n) in a following way:
+		\begin{itemize}
+			\item convolutional layer of size matching input of network (for CIFAR it is 32)
+			\item n blocks(16,32)
+			\item pool
+			\item n blocks(32,16)
+			\item pool
+			\item n blocks(64,8)
+			\item normalization 
+			\item pool
+		\end{itemize}
+		\begin{figure}[h]
+		\caption{TODO schemat resneta}
+				\centering
+				\includegraphics[width=\textwidth]{AlexNet}
+		\end{figure}
+		\subsection{Parameters}
+			\begin{itemize}
+ 			\item Weight initialization: XAVIER initializer
+ 			\item Optimizer: momentum 
+ 			\item Error: softmax cross entropy with logits
+ 			\item Non-linearity: ReLU
+			\end{itemize}
+
+
+\chapter{Implementation details}
 
 	\section{Used framework}
 
@@ -155,145 +332,9 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		A special build script was added, that was compiling our source files into a shared object file, which then was manually added in our Python tests and programs by a special Tensorflow call 'load\_op\_library'.
 
 		In order to test if the kernels computations are correct, unit tests were added to the library. Those tests are run every time the shared object file is being created.
-	\section{Used networks and datasets}
-		\subsection{LeNet on MNIST}
- 		LeNet is a small 7-level network invented by Yann LeCun et al. It is one of the most known neural network due to it’s simplicity. Almost everyone, who is new to machine learning, begins with implementing it on MNIST dataset. However, it does not mean that LeNet is not a powerful tool. According to Wikipedia, couple of banks are applying LeNet to recognise written digits on cheques. Provided implementation was highly affected by Tensorflow's tutorial. \\
- 		\subsubsection{MNIST}
- 			MNIST is a subset of NIST. Each example represents a handwritten digit drawn in black\&white. Examples were resized and cropped, so that each digit is centered and the size is equal to $18\times18$ pixels. The dataset is split into 2 parts: training (60,000 pictures) and test (10,000 pictures).
- 		\subsubsection{Network architecture}
- 			\begin{itemize}
- 			\item Convolution layer: kernel size $5 \times 5 \times 32$
- 			\item Max Pool layer: kernel size $2 \times 2$
- 			\item Convolution layer: kernel size $5 \times 5 \times 64$
- 			\item Max Pool layer: kernel size $2 \times 2$
- 			\item Fully-connected layer: $1024$ neurons
- 			\item Dropout layer: $0.5$
- 			\item Fully-connected layer: $10$ neurons
- 			\end{itemize}
- 			\begin{figure}[h]
-				\caption{Scheme of LeNet}
-				\centering
-				\includegraphics[width=\textwidth]{LeNet}
-			\end{figure}
- 		\subsubsection{Parameters}
- 			\begin{itemize}
- 			\item Weight initialization: truncated normal, stddev $0.1$
- 			\item Optimizer: Adam Optimizer, learning rate $10^{-4}$
- 			\item Error: softmax cross entropy with logits
- 			\item Non-linearity: ReLU
- 			\end{itemize}
- 	\subsection{AlexNet on ImageNet}
- 	AlexNet caused a huge breakthrough in deep neural networks after a great success during ImageNet Large-Scale Visual Recognition Challenge in 2012. It achieved top 5 test error rate of $15.4\%$ leaving other opponents far behind. In comparison, the next team achieved an error rate of $26.2\%$. 
- 	\subsection{Finetuned AlexNet on oxford-102}
- 	It has been 5 years since the astonishing victory of AlexNet, although people are still experimenting with it achieving great results. jimgoo(nick z gita, trzeba bedzie zacytowac) proposed a very clever approach of learning, which gave him a top 1 error rate of $7\%$ on oxford-102 set. In this experiment we try to replicate the results and find out whether it is possible to achieve similar accuracy using binarized network. 
- 		\subsubsection{Oxford-flowers-102}
- 			Oxford flowers dataset is containing the most common flowers found in United Kingdom. Each image represents a single flower. Within each class, the examples do not differ much, but there exists many similar classes, which makes the task harder. The images are saved in large scale and its’ sizes are not normalized. The dataset is split into 3 parts: test (6,149 pictures), train (1,020 images) and validation (1,020 images). In this experiment, the machine is trained on the test set and tested against the train set as the authors of CaffeNet fine-tuned on the Oxford 102 category flower dataset did.
- 		\subsubsection{Network architecture}
- 			\begin{itemize}
- 			\item Convolution layer: kernel size $11 \times 11 \times 96$, learning rate $10^{-3}$
- 			\item Max Pool layer: kernel size $3 \times 3$
- 			\item Normalization layer
- 			\item Convolution layer: kernel size $5 \times 5 \times 256$, learning rate $10^{-3}$
- 			\item Max Pool layer: kernel size $3 \times 3$
- 			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
- 			\item Convolution layer: kernel size $3 \times 3 \times 384$, learning rate $10^{-3}$
- 			\item Convolution layer: kernel size $3 \times 3 \times 256$, learning rate $10^{-3}$
- 			\item Fully-connected layer: $4096$ neurons, learning rate $10^{-3}$
- 			\item Dropout layer: $0.5$
- 			\item Fully-connected layer: $102$ neurons, learning rate $10^{-2}$
- 			\end{itemize}
- 			\begin{figure}[h]
-				\caption{Scheme of AlexNet}
-				\centering
-				\includegraphics[width=\textwidth]{AlexNet}
-			\end{figure}
- 		\subsubsection{Parameters}
- 			\begin{itemize}
- 			\item Weight initialization: pretrained on ImageNet 2012 dataset
- 			\item Optimizer: stochastic gradient descent
- 			\item Error: softmax cross entropy with logits
- 			\item Non-linearity: ReLU
-			\end{itemize}
-  	\subsection{Residual network on CIFAR-10}
-		\subsubsection{CIFAR-10}
-		CIFAR-10 is one of the most popular dataset. It is used for object recognition. It includes classes such as: airplanes, automobiles, birds, cats, deers, dogs, frogs, horses, ships and trucks. This dataset contains 60,000 images of size $32\times32$. Each class is represented by 6,000 images. The dataset was created by Alex Krizhevsky, Vinod Nair and Geoffrey Hinton. There also exists a bigger dataset called CIFAR-100.
-		\subsubsection{Network architecture}
-		Resnet is constructed using blocks. Every block($num\_filters$, $size\_filters$) contains:
-		\begin{itemize}
-			\item Normalization layer
-			\item Convolution layer with $num\_filters$ of $size\_filters$ size
-			\item Normalization layer
-			\item Convolution layer with $num\_filters$ of $size\_filters$ size
-			\item Identity connection which adds input to output of second convolution
-		\end{itemize}
-		\krystynaintodo{obrazek}
-		We use blocks to construct Resnet(n) in a following way:
-		\begin{itemize}
-			\item convolutional layer of size matching input of network (for CIFAR it is 32)
-			\item n blocks(16,32)
-			\item pool
-			\item n blocks(32,16)
-			\item pool
-			\item n blocks(64,8)
-			\item normalization 
-			\item pool
-		\end{itemize}
-		\krystynaintodo{obrazek}
-		\subsubsection{Parameters}
-			\begin{itemize}
- 			\item Weight initialization: XAVIER initializer
- 			\item Optimizer: momentum 
- 			\item Error: softmax cross entropy with logits
- 			\item Non-linearity: ReLU
-			\end{itemize}
+	
 
-
-	\section{Implemented binarization algorithm} \label{binarization_algorithm}
-
-		\subsection{Binarized convolution filters from XORNET \cite{xornet}}
-
-        In this approach we use special binarized filter for forward propagation.
-        \\\\
-        For an original filter $W$ forward propagation is:
-        \begin{enumerate}
-                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
-                \item Let $W'$ be matrix containing signs of $W$.
-                \item Calculate $A$ - average of elements for each filter in $W'$, so $A$ is a vector of size equal to number of filters in layer.
-                \item Compute standard convolution using matrix $W'$.
-                \item Return result of convolution multiplied by $A$.
-        \end{enumerate}
-        The back propagation is standard back-propagation made by using original W matrix. To achieve this result we override standard gradient to change sign to identity.
-        \\\\
-        In this type of binarizations, the gradients are in full precision, therefore the backward-pass still requires convolution between 1-bit numbers and 32-bit floating-points.
-		\subsection{Binarized convolution filters inspired by DoReFa \cite{dorefa}}
-
-		        In this approach we do not implement full methods from DoReFa network. We worked on one idea to average filters over all maps at the same time. It is very similar to XORNET scheme. 
-		        \\\\
-		        TODO - opis dokładniejszy co analizuje DoReFa 
-		        \\\\
-		        For original filter $W$ forward propagation is:
-		        \begin{enumerate}
-		                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
-		                \item Let $W'$ be matrix containing signs of $W$.
-		                \item Calculate $A$ average of elements for all filters in $W$, so $A$ is a scalar.
-		                \item Compute standard convolution using matrix $W'$.
-		                \item Return result of convolution multiplied by $A$.
-		        \end{enumerate}
-
-		        The only difference is that $A$ is now scalar, not a vector. This approach allows to speed up computation for both forward and back propagation (multiplication by scalar is very efficient) comparing to XORNET.
-
-		\subsection{Binarized filters and activations}
-		        For original filter W and input I forward propagation is:
-		        \begin{enumerate}
-		                \item Let n be the number of elements in each filter, e.g. if filter is matrix 3x3, n=9.
-		                \item Let $W_{sign}$ be matrix containing signs of W divided by A.
-		                \item Calculate A average of elements for each filter in $W_{sign}$, so A is a vector of size equal to numbers of filters in layer.
-		                \item Let $I_{abs}$ be matrix with absolute value of input.
-		                \item Let $I_{sign}$ be matrix with signs of input.
-		                \item Let $K$ to be result of computation of standard convolution using as input $I_{abs}$ and as weights matrix containing $\frac{1}{n}$ on each position.
-		                \item Compute standard convolution using input $I_{sign}$ and weights $W_{sign}$.
-		                \item Return result multiplied by $K$ and $A$.
-		        \end{enumerate}
+	
 
 \chapter{Experiments results}
 
@@ -458,25 +499,6 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			\item experiments on Alexnet
 			\item code review for collegues
 		\end{itemize}
-
-
-\chapter{Nie wiem gdzie to wsadzić}
-    One of the advantages of using binarized neural networks is that we can save trained weights as binary numbers and store them on a device with limited resources. In this section, it is discussed exactly how much space we can save, when using different kinds of binarization.
-    
-    \section{Binarized weights}
-        In this case we store binary value instead of a floating point for each weight. In addition, we also need to store coefficients $\alpha$ which are floating point numbers. The amount of these coefficients depends on the type of binarization we perform. Computing $\alpha$ for each kernel compared to computing it foe each layer gives us slightly worse space and computation time savings, but yields better accuracy.
-        
-        General formula for space savings is as follows (assuming we use 32 bit floating point numbers):
-        $$s_m =  \frac{space_{bin}}{space_{float}} = \frac{\#_\alpha * 32bit + \#_{weights}*1bit}{\#_{weights} * 32bit} $$
-        
-        \subsection{Different $\alpha$ for each layer }
-        In this case $\#_\alpha = \#_{layers}$. So in in LENET, where $\#_{layers} = 4$ and $\#_{weights} = 1642272$ we have $s_m = 1/(31.9975)$.
-        
-        \subsection{Different $\alpha$ for each kernel }
-        In this case we have $\#_\alpha = \#_{kernels}$. To compute the space savings for LENET model, we can observe that the number of weights is same as above, but $\#_\alpha = 32+32+1024+10 = 1098$, so $s_m = 1/(31.3297)$.
-	    
-	    \section{Binarized inputs and weights (XNORNET)}
-	    Using this kind of binarization gives same savings as binarized weights, as we have to compute all $\beta$ coefficients during inference (they are not saved). Still, the space gain is around 32x which is an excellent result.
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
