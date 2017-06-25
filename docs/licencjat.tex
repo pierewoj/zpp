@@ -120,7 +120,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
     \end{itemize}
 \part{Architecture overview}
 \chapter{Implemented binarization algorithms}
-	\section{Binarized convolution filters from XORNET \cite{xornet}}
+	\section{Binarized filters}
 
         In this approach we use special binarized filter for forward propagation.
         \\\\
@@ -135,22 +135,6 @@ Currently deep neural networks get better results than state-of-the-art algorith
         The back propagation is standard back-propagation made by using original W matrix. To achieve this result we override standard gradient to change sign to identity.
         \\\\
         In this type of binarizations, the gradients are in full precision, therefore the backward-pass still requires convolution between 1-bit numbers and 32-bit floating-points.
-		\section{Binarized convolution filters inspired by DoReFa \cite{dorefa}}
-
-		        In this approach we do not implement full methods from DoReFa network. We worked on one idea to average filters over all maps at the same time. It is very similar to XORNET scheme. 
-		        \\\\
-		        TODO - opis dokładniejszy co analizuje DoReFa 
-		        \\\\
-		        For original filter $W$ forward propagation is:
-		        \begin{enumerate}
-		                \item Let $n$ be the number of elements in each filter, e.g. if filter is matrix $3 \times 3, n=9$.
-		                \item Let $W'$ be matrix containing signs of $W$.
-		                \item Calculate $A$ average of elements for all filters in $W$, so $A$ is a scalar.
-		                \item Compute standard convolution using matrix $W'$.
-		                \item Return result of convolution multiplied by $A$.
-		        \end{enumerate}
-
-		        The only difference is that $A$ is now scalar, not a vector. This approach allows to speed up computation for both forward and back propagation (multiplication by scalar is very efficient) comparing to XORNET.
 
 		\section{Binarized filters and activations}
 		        For original filter W and input I forward propagation is:
@@ -334,6 +318,32 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 		In order to test if the kernels computations are correct, unit tests were added to the library. Those tests are run every time the shared object file is being created.
 	
+	\chapter{Team members contribution}
+	\section{Krystyna's contribution}
+		\begin{itemize}
+			\item organising the team's work
+			\item contact with project supervisor
+			\item implementation of Resnet
+			\item experiments on Resnet
+		\end{itemize}
+	\section{Jakub's contribution}
+		\begin{itemize}
+			\item implementation of TensorFlow binarized convolution
+			\item experiments on Lenet
+			\item implementing C++ gradient for new operation
+		\end{itemize}
+	\section{Przemysław's contribution}
+		\begin{itemize}
+			\item contact with our partner company
+			\item implementation of TensorFlow binarized convolution
+			\item implementing qulity tests for project
+		\end{itemize}
+	\section{Adam's contribution}
+		\begin{itemize}
+			\item implementation of Alexnet
+			\item experiments on Alexnet
+			\item code review for collegues
+		\end{itemize}
 
 	
 \part{Experiments results}
@@ -356,6 +366,10 @@ Currently deep neural networks get better results than state-of-the-art algorith
                     \end{tabular}
                     \label{table:1}
 	            \end{table}
+	            \begin{figure}[h]
+				\centering
+				\includegraphics[width=\textwidth]{images/LeNet}
+			\end{figure}
 		        \paragraph{Discussion} 
 			Both binarization methods acquired near state-of-the-art scores. The MNIST dataset is really simple and the LeNet structure is not complicated. Thus, the binarization does not significantly affect on the precision. The results are not surprising nor ground-braking. We made this experiment mostly for verifying our binarization methods.
 	\section{AlexNet on Flowers}
@@ -399,13 +413,13 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	            \end{table}
 	            \begin{figure}[h]
 				\centering
-				\includegraphics[width=\textwidth]{images/Finetuning-AlexNet-on-flowers102}
+				\includegraphics[width=\textwidth]{images/AlexNet-flowers-102}
 			\end{figure}
 		        \paragraph{Discussion} 
 			This experiment shows that binarized networks achieve near state-of-the-art performance also with pretrained weights, which were not trained on binarized network.
 	\section{Residual network on CIFAR-10}
 		\subsection{Results and discussion}
-			\subsubsection{Binary Resnet XORNET style}
+			\subsubsection{Binary weights}
 		        \paragraph{Results} 
 		     
 		        The results of experiments are in table \ref{table:1}.
@@ -427,42 +441,18 @@ Currently deep neural networks get better results than state-of-the-art algorith
                     \end{tabular}
                     \label{table:1}
 	            \end{table}
-
+	            \begin{figure}[h]
+				\centering
+				\caption{TODO: to jest fejkowy obrazek}
+				\includegraphics[width=\textwidth]{images/AlexNet-flowers-102}
+			\end{figure}
 		        \paragraph{Discussion} 
 
 		        The results of binarized network are very good comparing to standard ResNet. The property of ResNet is preserved and the are no much difference in accuracy. That is very interesting result, because it shows that binarizing ResNet is only slightly decreasing accuracy so it is worth to use it to save memory and computation time, especially on CPU.
 
-
-		\subsubsection{Binary Resnet DoReFa style}
-	        \paragraph{Results} 
-	        The results of experiments are included in table \ref{table:nonlin2}. 
-	        \begin{table}[H]
-                \caption{Results of Resnet and BinResnet}
-                \centering
-                \begin{tabular}{c c c c c c c}
-                \hline\hline
-                blocks & layers & learning rate & epochs & ResNet & BinResnet & epochs  \\ [0.5ex]
-                \hline
-                        2 & 14  & 0.1   & 15 & 80\% & 78\% & 25 \\
-                        5 & 32  & 0.1   & 15 & 82\% & 80\% & 40 \\
-                        18& 110 & 0.1   & 20 & 84\% & 80\% & 40 \\
-                \hline
-                        2 & 14  & 0.01  & 15 & 78\% & 65\% & 25 \\
-                        5 & 32  & 0.01  & 15 & 79\% & 67\% & 25 \\
-                        18 & 110 & 0.01 & 20 & 81\% & 67\% & 40 \\
-                \hline
-                \end{tabular}
-                \label{table:nonlin2}
-	        \end{table}
-
-		        \paragraph{Discussion} 
-	                The network with binarization which takes average over all filters is affected more easily by changes in model parameters. For smaller learning rates it learns quite slow, achieving around 75\% of accuracy compared to classical resnet in same number of epochs. It has a potencial for longer training - training it for more than 40 epochs can generate accuracy around 0.8. 
-	                \\\\
-	                Of course it is faster than XORNET implementation, but because it requires more training and gets lower accuracy, one must decide if this is good approach based on available computation machine. For testing on personal laptop, XORNET is better solution.
-
 			\subsubsection{Binary Resnet with binary weights and activation}
 			        \paragraph{Results} 
-			        \krystynaintodo{eksperymenty Adama}
+			        TODO - eksperymenty Adama albo napisać że nie wyszło
 			        \paragraph{Discussion} 
 			        
 			        \begin{itemize}
@@ -471,11 +461,43 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			                \item Smaller learning rate allows network to learn. Unfortunately the problem of deeper network still occurs, so the advantage of ResNet is not preserved.
 			        \end{itemize}
 \chapter{Increasing number of binarized filters}
+	\section{LeNet on MNIST}
+	\subsection{Results}
+		 The results of experiments are in table \ref{table:1}.
+		\begin{figure}[h]
+				\caption{TODO: dobry obrazek}
+				\centering
+				\includegraphics[width=\textwidth]{images/filter-ratio}
+			\end{figure}
+	\subsection{Discussion}
+	\section{AlexNet on flowers-17}
+	\subsection{Results}
+		 The results of experiments are in table \ref{table:1}.
+		\begin{figure}[h]
+				\caption{TODO: dobry obrazek}
+				\centering
+				\includegraphics[width=\textwidth]{images/AlexNet-flowers17}
+			\end{figure}
+	\subsection{Discussion}
+	\section{ResNet on CIFAR-10}
+		\subsection{Results}
+		 The results of experiments are in table \ref{table:1}.
+		\begin{figure}[h]
+				\centering
+				\includegraphics[width=\textwidth]{images/filter-ratio}
+			\end{figure}
+		\subsection{Discussion}
+			Inscreasing number of filters is improving network accuaracy. When we give 2 times more filters in each convolutional layer we are getting accuracy of a non-binarized network.
 
-\part{Summary}
 \chapter{Conclusions}
 	\section{Discussion of experiments results}
-		\krystynaintodo{tu opis wspólnych konkluzji dla wszystkich eksperymentów}
+		TODO: rozwinąć ten fragment. \\
+		Our experiments confirmed our expectation - binarized neural network can achieve accuracy which is very close to non-binarized networks. It works pretty well with simple architectures such as LeNet and AlexNet. On more complicated network, such as ResNet, there one must be very careful with setting up parameters. 
+		\\\\
+		For partially binarized network (with only filters binarized) we got great results for all tested architectures.
+		\\\\
+		For all networks increasing number of filters by around 100\% gave as accuracy of original network. This result is very promising - if we take twice much parameters, but each of them will be 32 smaller (after conversting float to bool) we still used 16 times less memory.
+
 	\section{Future work}
 		There are a couple of things, that could be further analyzed or added, namely:
 		\begin{itemize}
@@ -485,32 +507,6 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			\item Right now it was only checked, how much the binarized network needs to be extended to achive the accuracy of its standard version. It could be also checked, what is the limit of achievable accuracy for the binarized networks and how many iterations are required to achieve the maximal accuracy on a given dataset.
 		\end{itemize} 
 
-\chapter{Team members contribution}
-	\section{Krystyna's contribution}
-		\begin{itemize}
-			\item organising the team's work
-			\item contact with project supervisor
-			\item implementation of Resnet
-			\item experiments on Resnet
-		\end{itemize}
-	\section{Jakub's contribution}
-		\begin{itemize}
-			\item implementation of TensorFlow binarized convolution
-			\item experiments on Lenet
-			\item implementing C++ gradient for new operation
-		\end{itemize}
-	\section{Przemysław's contribution}
-		\begin{itemize}
-			\item contact with our partner company
-			\item implementation of TensorFlow binarized convolution
-			\item implementing qulity tests for project
-		\end{itemize}
-	\section{Adam's contribution}
-		\begin{itemize}
-			\item implementation of Alexnet
-			\item experiments on Alexnet
-			\item code review for collegues
-		\end{itemize}
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -520,8 +516,6 @@ Currently deep neural networks get better results than state-of-the-art algorith
 \bibitem{xornet} Mohammad Rastegari, Vicente Ordonez, Joseph Redmon, Ali Farhadi, \textit{XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks}, https://arxiv.org/abs/1603.05279 (2016)
 
 \bibitem{binaryConnect} Matthieu Courbariaux, Yoshua Bengio, Jean-Pierre David, \textit{BinaryConnect: Training Deep Neural Networks with binary weights during propagations}, https://arxiv.org/abs/1511.00363 (2015)
-
-\bibitem{dorefa} Shuchang Zhou, Yuxin Wu, Zekun Ni, Xinyu Zhou, He Wen, Yuheng Zou, \textit{DoReFa-Net: Training Low Bitwidth Convolutional Neural Networks with Low Bitwidth Gradients}, https://arxiv.org/abs/1606.06160 (2016)
 
 \bibitem{resnet} Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun, \textit{Deep Residual Learning for Image Recognition}, https://arxiv.org/abs/1512.03385 (2015)
 
