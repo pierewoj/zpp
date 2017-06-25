@@ -32,7 +32,7 @@
 
 \maketitle
 \begin{abstract}
-TODO
+This project was created during "Team programming project" classes in 2016/17 and was proposed by Intel. We analyse some properties of binarized neural networks - the neural networks which use binary parameter instead of float numbers commonly used in deep learning. We experimented using different network structures and binarization algorithms to check accuracy and find ways to improve it.
 \end{abstract}
 
 \tableofcontents
@@ -118,6 +118,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
         
         \item Dropout layer - a layer which returns a modification of its input such that some of the values are randomly set to zero. Dropout layers are used as a regularization technique.   
     \end{itemize}
+\part{Architecture overview}
 \chapter{Implemented binarization algorithms}
 	\section{Binarized convolution filters from XORNET \cite{xornet}}
 
@@ -335,8 +336,8 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	
 
 	
-
-\chapter{Experiments results}
+\part{Experiments results}
+\chapter{Binarized vs standard network accuracy}
 
 	\section{Lenet on MNIST}
 		\subsection{Results and discussion}
@@ -374,6 +375,11 @@ Currently deep neural networks get better results than state-of-the-art algorith
                     \end{tabular}
                     \label{table:1}
 	            \end{table}
+	            \begin{figure}[h]
+				\centering
+				\includegraphics[width=\textwidth]{images/AlexNet-flowers17}
+			\end{figure}
+	            
 		        \paragraph{Discussion} 
                         The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not lose as much precision as it was expected. Surprisngly, there is only slight difference between full-precision and binary weights network.
 		\subsection{Fine-tuning results and discussion}
@@ -391,6 +397,10 @@ Currently deep neural networks get better results than state-of-the-art algorith
                     \end{tabular}
                     \label{table:1}
 	            \end{table}
+	            \begin{figure}[h]
+				\centering
+				\includegraphics[width=\textwidth]{images/Finetuning-AlexNet-on-flowers102}
+			\end{figure}
 		        \paragraph{Discussion} 
 			This experiment shows that binarized networks achieve near state-of-the-art performance also with pretrained weights, which were not trained on binarized network.
 	\section{Residual network on CIFAR-10}
@@ -460,7 +470,9 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			                \item Network with binarized both weights and activation is much harder to learn. In 2-layer Lenet the results were still very stable, but adding more layers, for example 14 in 2-blocks ResNet made network able to learn only during first few rounds of computation.
 			                \item Smaller learning rate allows network to learn. Unfortunately the problem of deeper network still occurs, so the advantage of ResNet is not preserved.
 			        \end{itemize}
+\chapter{Increasing number of binarized filters}
 
+\part{Summary}
 \chapter{Conclusions}
 	\section{Discussion of experiments results}
 		\krystynaintodo{tu opis wspólnych konkluzji dla wszystkich eksperymentów}
