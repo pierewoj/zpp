@@ -368,7 +368,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	            \end{table}
 	            \begin{figure}[h]
 				\centering
-				\includegraphics[width=\textwidth]{images/LeNet}
+				\includegraphics[width=\textwidth]{images/LeNet-training}
 			\end{figure}
 		        \paragraph{Discussion} 
 			Both binarization methods acquired near state-of-the-art scores. The MNIST dataset is really simple and the LeNet structure is not complicated. Thus, the binarization does not significantly affect on the precision. The results are not surprising nor ground-braking. We made this experiment mostly for verifying our binarization methods.
@@ -382,9 +382,9 @@ Currently deep neural networks get better results than state-of-the-art algorith
                     \hline\hline
 			    Accuracy & Full-precision & Binary weights & Binary weights \& inputs \\ [0.5ex]
                     \hline
-			    top-1 & 76\% & 75\% & 61\% \\
+			    top-1 & 76\% & 79\% & 64\% \\
                     \hline
-			    top-5 & 98\% & 99\% & 91\% \\
+			    top-5 & 98\% & 95\% & 90\% \\
                     \hline
                     \end{tabular}
                     \label{table:1}
@@ -395,7 +395,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			\end{figure}
 	            
 		        \paragraph{Discussion} 
-                        The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not lose as much precision as it was expected. Surprisngly, there is only slight difference between full-precision and binary weights network.
+                        The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not lose as much precision as it was expected. Surprisingly, the binary weights network outperforms the full-precision one.
 		\subsection{Fine-tuning results and discussion}
 		     
 		        The results of experiments are in table \ref{table:1}.
@@ -404,19 +404,19 @@ Currently deep neural networks get better results than state-of-the-art algorith
                     \centering
                     \begin{tabular}{c c c c c c}
                     \hline\hline
-			    Full-precision & Binary weights \\ [0.5ex]
+			    Full-precision & Binary weights vector factor & Binary weights scalar factor \\ [0.5ex]
                     \hline
-			    85\% & 72\% \\
+			    85\% & 72\% & 63\% \\
                     \hline
                     \end{tabular}
                     \label{table:1}
 	            \end{table}
 	            \begin{figure}[h]
 				\centering
-				\includegraphics[width=\textwidth]{images/AlexNet-flowers-102}
-			\end{figure}
+				\includegraphics[width=\textwidth]{images/Fine-tuning-AlexNet}
+		    \end{figure}
 		        \paragraph{Discussion} 
-			This experiment shows that binarized networks achieve near state-of-the-art performance also with pretrained weights, which were not trained on binarized network.
+			This experiment shows that binarized networks achieve near state-of-the-art performance also with pretrained weights, which were not trained on the binarized network.
 	\section{Residual network on CIFAR-10}
 		\subsection{Results and discussion}
 			\subsubsection{Binary weights}
@@ -444,17 +444,15 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	            \begin{figure}[h]
 				\centering
 				\caption{TODO: to jest fejkowy obrazek}
-				\includegraphics[width=\textwidth]{images/AlexNet-flowers-102}
+				\includegraphics[width=\textwidth]{images/Fine-tuning-AlexNet}
 			\end{figure}
 		        \paragraph{Discussion} 
 
 		        The results of binarized network are very good comparing to standard ResNet. The property of ResNet is preserved and the are no much difference in accuracy. That is very interesting result, because it shows that binarizing ResNet is only slightly decreasing accuracy so it is worth to use it to save memory and computation time, especially on CPU.
 
-			\subsubsection{Binary Resnet with binary weights and activation}
-			        \paragraph{Results} 
-			        TODO - eksperymenty Adama albo napisać że nie wyszło
+			\subsubsection{Binary Resnet with binary weights and inputs}
 			        \paragraph{Discussion} 
-			        
+				We did not manage to train any size of ResNet with binary weights and inputs, though the authors of XNORNET claim that their network achieves near state-of-the-art results. They did not provide any code, so we were struggling with it on our own. The size of the ResNet makes it very delicate. Small change in learning rate has a great impact on the accuracy. In this experiment, the greatest (still not satisfying) accuracy achieved ResNet-2 with score of 20\%. 
 			        \begin{itemize}
 			                \item Implementation which is using tf.nn.conv2d 2 times in each binarization process is much slower. 
 			                \item Network with binarized both weights and activation is much harder to learn. In 2-layer Lenet the results were still very stable, but adding more layers, for example 14 in 2-blocks ResNet made network able to learn only during first few rounds of computation.
@@ -462,23 +460,14 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			        \end{itemize}
 \chapter{Increasing number of binarized filters}
 	\section{LeNet on MNIST}
-	\subsection{Results}
-		 The results of experiments are in table \ref{table:1}.
-		\begin{figure}[h]
-				\caption{TODO: dobry obrazek}
-				\centering
-				\includegraphics[width=\textwidth]{images/filter-ratio}
-			\end{figure}
 	\subsection{Discussion}
+	Every binarization of LeNet achieved near stat-of-the-art results. The experiment in which we increase the ammount of feature maps in LeNet has no value.
+	\section{AlexNet on flowers-102}
+	\subsection{Discussion}
+	Combining pretrained feature maps with randomized one leads to trouble. Any network did not manage to converge. Only if the randomized parameters are set to values near 0, the networks start to learn. The problem is that new parameters do not have significant meaning, so this experiment reduces to the one in previous section. On the other hand, our resources are too small to obtain pretrained, scaled filters, because it requires to train AlexNet on ImageNet dataset, which has over 1.2 million of images.
 	\section{AlexNet on flowers-17}
-	\subsection{Results}
-		 The results of experiments are in table \ref{table:1}.
-		\begin{figure}[h]
-				\caption{TODO: dobry obrazek}
-				\centering
-				\includegraphics[width=\textwidth]{images/AlexNet-flowers17}
-			\end{figure}
 	\subsection{Discussion}
+	Weights binarization led to the state-of-the-art performance, so we omit this case. Unfortunately, we did not manage to achieve greater performance on the binary weights \& inputs network with increased number of feature maps. The more we increased the amount of feature maps, the worse accuracy on testing set we achieved (3\% on average), though the training set accuracy rose (from 73\% to 80\%). It also requires about 3 times longer training.  We were not able to run networks with higher feature map ratio than 2, because the size of the network exceed the resources of our laptops.
 	\section{ResNet on CIFAR-10}
 		\subsection{Results}
 		 The results of experiments are in table \ref{table:1}.
