@@ -395,7 +395,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			\end{figure}
 	            
 		        \paragraph{Discussion} 
-                        The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not lose as much precision as it was expected. Surprisngly, the binary weights network outperforms the full-precision one.
+                        The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not lose as much precision as it was expected. Surprisingly, the binary weights network outperforms the full-precision one.
 		\subsection{Fine-tuning results and discussion}
 		     
 		        The results of experiments are in table \ref{table:1}.
@@ -464,10 +464,10 @@ Currently deep neural networks get better results than state-of-the-art algorith
 	Every binarization of LeNet achieved near stat-of-the-art results. The experiment in which we increase the ammount of feature maps in LeNet has no value.
 	\section{AlexNet on flowers-102}
 	\subsection{Discussion}
-	Combining pretrained feature maps with randomized one leads to trouble. Any network did not manage to converge. Only if the randomized parameters are set to values near 0, the networks start to learn. The problem is that new parameters do not have significant meaning, so this experiment reduces to the one in previous section. On the other hand, our resources are too small to obtain pretrained, scaled filters, because it requires to train AlexNet on ImageNet dataset, which has over 1.2 milion of images.
+	Combining pretrained feature maps with randomized one leads to trouble. Any network did not manage to converge. Only if the randomized parameters are set to values near 0, the networks start to learn. The problem is that new parameters do not have significant meaning, so this experiment reduces to the one in previous section. On the other hand, our resources are too small to obtain pretrained, scaled filters, because it requires to train AlexNet on ImageNet dataset, which has over 1.2 million of images.
 	\section{AlexNet on flowers-17}
 	\subsection{Discussion}
-	Weights binarization led to the state-of-the-art performance, so we omit this case. Unfortunately, we did not manage to achieve greater performance on the binary weights \& inputs network with increased number of feature maps. The more we increased the ammount of feature maps, the worse accuracy on testing set we acheived (3\% on average), though the training set accuracy rised (from 73\% to 80\%). It also requires about 3 times longer training.  We were not able to run networks with higher feature map ratio than 2, because the size of the network exceed the resources of our laptops.
+	Weights binarization led to the state-of-the-art performance, so we omit this case. Unfortunately, we did not manage to achieve greater performance on the binary weights \& inputs network with increased number of feature maps. The more we increased the amount of feature maps, the worse accuracy on testing set we achieved (3\% on average), though the training set accuracy rose (from 73\% to 80\%). It also requires about 3 times longer training.  We were not able to run networks with higher feature map ratio than 2, because the size of the network exceed the resources of our laptops.
 	\section{ResNet on CIFAR-10}
 		\subsection{Results}
 		 The results of experiments are in table \ref{table:1}.
