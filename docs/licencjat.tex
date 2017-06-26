@@ -150,7 +150,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		        \end{enumerate}
 
 	\chapter{Advantages of binarized neural network}
-    One of the advantages of using binarized neural networks is that we can save trained weights as binary numbers and store them on a device with limited resources. In this section, it is discussed exactly how much space we can save, when using different kinds of binarization.
+    One of the advantages of using binarized neural networks is that we can save trained weights as binary numbers and store them on a device with limited resources. What is more, it is also possible to optimize compute time. In this section, it is discussed exactly how much space and time we can save, when using different kinds of binarization.
     
     \section{Binarized weights}
         In this case we store binary value instead of a floating point for each weight. In addition, we also need to store coefficients $\alpha$ which are floating point numbers. The amount of these coefficients depends on the type of binarization we perform. Computing $\alpha$ for each kernel compared to computing it foe each layer gives us slightly worse space and computation time savings, but yields better accuracy.
@@ -158,14 +158,14 @@ Currently deep neural networks get better results than state-of-the-art algorith
         General formula for space savings is as follows (assuming we use 32 bit floating point numbers):
         $$s_m =  \frac{space_{bin}}{space_{float}} = \frac{\#_\alpha * 32bit + \#_{weights}*1bit}{\#_{weights} * 32bit} $$
         
-        \subsection{Different $\alpha$ for each layer }
-        In this case $\#_\alpha = \#_{layers}$. So in in LENET, where $\#_{layers} = 4$ and $\#_{weights} = 1642272$ we have $s_m = 1/(31.9975)$.
-        
-        \subsection{Different $\alpha$ for each kernel }
-        In this case we have $\#_\alpha = \#_{kernels}$. To compute the space savings for LENET model, we can observe that the number of weights is same as above, but $\#_\alpha = 32+32+1024+10 = 1098$, so $s_m = 1/(31.3297)$.
+        In case of different $\alpha$ for each layer $\#_\alpha = \#_{layers}$. So in in LENET, where $\#_{layers} = 4$ and $\#_{weights} = 1642272$ space saving coefficient $s_m = 1/(31.9975)$. If $\alpha$ is computed for each kernel, then $\#_\alpha = \#_{kernels}$. To compute the space savings for LENET model, we can observe that the number of weights is same as above, but $\#_\alpha = 32+32+1024+10 = 1098$, so $s_m = 1/(31.3297)$.
+            
+	    If we binarize weights, we can use the fact that to compute convolution we do not need to perform multiplication. This results in around 2x savings in compute time \cite{xornet}.
 	    
 	    \section{Binarized inputs and weights (XNORNET)}
 	    Using this kind of binarization gives same savings as binarized weights, as we have to compute all $\beta$ coefficients during inference (they are not saved). Still, the space gain is around 32x which is an excellent result.
+	    
+	    In this case, it is possible to compute convolution using XNOR bitcount operations only. This results in around 58x savings in compute time \cite{xornet}.
 
 \chapter{Used networks and datasets}
 		\section{LeNet on MNIST}
