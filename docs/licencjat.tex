@@ -481,6 +481,19 @@ Tensorflow’s library provides a wrapper for a user-defined function. That is w
 		\subsection{Discussion}
 			Inscreasing number of filters is improving network accuaracy. When we give 2 times more filters in each convolutional layer we are getting accuracy of a non-binarized network.
 
+\chapter{The development process}
+	A range of external tools was used in order to organize work and to have a better overview of the current status of all of the ongoing tasks.
+
+	Git was chosen as a version control system for this project mainly due to its advantages when it comes to local branching and that every member of the team had some experience with this tool.
+
+	When it comes to the build automation tool, there was no need to have one for the Python implementation and experiments. In case of the implemented C++ operation the team has used the build automation tool which is used by the Tensorflow framework, namely Bazel.	
+
+	To simplify communication between members of the team and other people involved in this project we used Slack, where a list of dedicated channels were created. This has helped in ordering the discussions over different topics, as one topic was hold in one channel.
+
+	The team worked in accordance with the Scrum Methodology with 1-week sprints. One of the members at the begining of the project was chosen to be the Scrum Master. Dividing workflow into separte tasks, which could be accomplished in a range of a week, helped with keeping the team updated with the project status. Also because of the weekly meeting every team member was updated about the work of the others. Due to the short length of the sprint it was easier for the team to prioritize work and adapt to the changes in our approach of delivering the requested software.
+
+	Our Scrum board was created in a tool called Trello. In this tool one can define the stages that each task has to visit when moving from the backlog to done. It is also easy to assign work to specific people and to add subtasks for bigger tickets. During the whole project the backlog was getting updated after the weekly meetings. At the top of the backlog the tasks of the highest priority were kept.
+
 \chapter{Conclusions}
 	\section{Discussion of experiments results}
 		TODO: rozwinąć ten fragment. \\
