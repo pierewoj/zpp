@@ -25,14 +25,14 @@
 \opiekun{Dr. Konrad Durnoga}
 \kierunek{COMPUTER SCIENCE}
 \klasyfikacja{  Computing methodologies - Machine learning - Machine learning approaches - Neural Networks}
-\keywords{binarized neural network, XORNET}
+\keywords{binarized neural network, XNORNET}
 \dziedzina{ 11.3 Informatics, Computer Science}
 \tytulang{Inferencja w sieciach neuronowych przy użyciu arytmetyki niskiej precyzji}
 \begin{document}
 
 \maketitle
 \begin{abstract}
-This project was created during "Team programming project" classes in 2016/17 and was proposed by Intel. We analyse some properties of binarized neural networks - the neural networks which use binary parameter instead of float numbers commonly used in deep learning. We experimented using different network structures and binarization algorithms to check accuracy and find ways to improve it.
+This project was created during "Team programming project" classes in 2016/17 and was proposed by Intel. We analyse some properties of binarized neural networks - the neural networks using binary parameter instead of floating-point numbers commonly used in deep learning. We experimented using different network structures and binarization algorithms to check accuracy and find ways to improve it.
 \end{abstract}
 
 \tableofcontents
@@ -44,7 +44,6 @@ This project was created during "Team programming project" classes in 2016/17 an
 Deep learning is a branch of machine learning which tries to model high level abstractions in data (like understanding words or finding objects on image) using a graph of simple elements - neurons, connected with specific activations and weights to others. It has recently gained a lot of interest from the industry, especially after recent successes in image or speech recognision.
 
 The most important part of deep learning is training net based on the samples that the result is known. After each training step one can change weights and activation in model to make output of the network as close as possible to the expected value.
-
 
 Currently deep neural networks get better results than state-of-the-art algorithms in many areas, such as computer vision and speech recognition. This breakthrough was possible because computing power of modern computers is high enough to handle intensive workload required to train large artificial neural networks.
 
@@ -153,7 +152,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
     One of the advantages of using binarized neural networks is that we can save trained weights as binary numbers and store them on a device with limited resources. In this section, it is discussed exactly how much space we can save, when using different kinds of binarization.
     
     \section{Binarized weights}
-        In this case we store binary value instead of a floating point for each weight. In addition, we also need to store coefficients $\alpha$ which are floating point numbers. The amount of these coefficients depends on the type of binarization we perform. Computing $\alpha$ for each kernel compared to computing it foe each layer gives us slightly worse space and computation time savings, but yields better accuracy.
+        In this case we store binary value instead of a floating point for each weight. In addition, we also need to store coefficients $\alpha$ which are floating-point numbers. The amount of these coefficients depends on the type of binarization we perform. Computing $\alpha$ for each kernel compared to computing it for each layer gives us slightly worse space and computation time savings, but yields better accuracy.
         
         General formula for space savings is as follows (assuming we use 32 bit floating point numbers):
         $$s_m =  \frac{space_{bin}}{space_{float}} = \frac{\#_\alpha * 32bit + \#_{weights}*1bit}{\#_{weights} * 32bit} $$
@@ -287,9 +286,9 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 	\section{Used framework}
 
-		We decided to work with one of open source framework that can be used for neural networks. The structure of BNN proposed in Binary Connect \cite{binaryConnect} and XORNET \cite{xornet} is very similar to the standard convolutional network, so there is no need to implement BNN from scratch. 
+		We decided to work with one of the open source frameworks, that can be used for neural networks. The structure of BNN proposed in Binary Connect \cite{binaryConnect} and XNORNET \cite{xnornet} is very similar to the standard convolutional network, so there is no need to implement BNN from scratch. 
 		
-		All frameworks that we analyze (TensorFlow, Torch, Caffe) have similar functionality, for example they have already implemented pooling and affine layers so we can easily reuse them. 
+		All frameworks that we analyse (TensorFlow, Torch, Caffe) have similar functionality, for example they have already implemented pooling and affine layers so we can easily reuse them. 
 
 		From available frameworks we decided to choose TensorFlow \cite{tensorFlow}. It is an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (called tensors) transported between them. In case on of neural networks, nodes will represent layers of network. 
 		The advantage of TensorFlow over other frameworks is really good community support and solid documentation.
@@ -465,7 +464,7 @@ Tensorflow’s library provides a wrapper for a user-defined function. That is w
 \chapter{Increasing number of binarized filters}
 	\section{LeNet on MNIST}
 	\subsection{Discussion}
-	Every binarization of LeNet achieved near stat-of-the-art results. The experiment in which we increase the ammount of feature maps in LeNet has no value.
+	Every binarization of LeNet achieved near stat-of-the-art results. The experiment in which we increase the amount of feature maps in LeNet has no value.
 	\section{AlexNet on flowers-102}
 	\subsection{Discussion}
 	Combining pretrained feature maps with randomized one leads to trouble. Any network did not manage to converge. Only if the randomized parameters are set to values near 0, the networks start to learn. The problem is that new parameters do not have significant meaning, so this experiment reduces to the one in previous section. On the other hand, our resources are too small to obtain pretrained, scaled filters, because it requires to train AlexNet on ImageNet dataset, which has over 1.2 million of images.
@@ -489,7 +488,7 @@ Tensorflow’s library provides a wrapper for a user-defined function. That is w
 		\\\\
 		For partially binarized network (with only filters binarized) we got great results for all tested architectures.
 		\\\\
-		For all networks increasing number of filters by around 100\% gave as accuracy of original network. This result is very promising - if we take twice much parameters, but each of them will be 32 smaller (after conversting float to bool) we still used 16 times less memory.
+		For all networks increasing number of filters by around 100\% gave accuracy as good as the one of original network. This result is very promising - if we take twice much parameters, but each of them will be 32 smaller (after conversting float to bool) we still used 16 times less memory.
 
 	\section{Future work}
 		There are a couple of things, that could be further analyzed or added, namely:
@@ -506,7 +505,7 @@ Tensorflow’s library provides a wrapper for a user-defined function. That is w
 
 \bibitem{understanding} Chiyuan Zhang, Samy Bengio, Moritz Hardt, Benjamin Recht, Oriol Vinyals, \textit{Understanding deep learning requires rethinking generalization}, https://arxiv.org/abs/1611.03530 (2016)
 
-\bibitem{xornet} Mohammad Rastegari, Vicente Ordonez, Joseph Redmon, Ali Farhadi, \textit{XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks}, https://arxiv.org/abs/1603.05279 (2016)
+\bibitem{xnornet} Mohammad Rastegari, Vicente Ordonez, Joseph Redmon, Ali Farhadi, \textit{XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks}, https://arxiv.org/abs/1603.05279 (2016)
 
 \bibitem{binaryConnect} Matthieu Courbariaux, Yoshua Bengio, Jean-Pierre David, \textit{BinaryConnect: Training Deep Neural Networks with binary weights during propagations}, https://arxiv.org/abs/1511.00363 (2015)
 
