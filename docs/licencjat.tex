@@ -39,14 +39,14 @@ This project was created during "Team programming project" classes in 2016/17 an
 	
 \section{What is deep learning and why is it interesting?}
 
-Deep learning is a branch of machine learning which tries to model high level abstractions in data (like understanding words or finding objects on image) using a graph of simple elements - neurons, connected with specific activations and weights to others. It has recently gained a lot of interest from the industry, especially after recent successes in image or speech recognision.
+Deep learning is a branch of machine learning which tries to model high level abstractions in the data (like understanding words or finding objects on image) using a graph of simple elements - neurons, connected with specific activations and weights to others. It has recently gained a lot of interest from the industry, especially after recent successes in image or speech recognision.
 
-The most important part of deep learning is training a net based on samples that the result is known. After each training step one can change weights and activation in model to make output of the network as close as possible to the expected value.
+The most important part of deep learning is training a net based on samples, which classification is already known. After each training step one can change weights and activation in model to make output of the network as close as possible to the expected value.
 
-Currently deep neural networks get better results than state-of-the-art algorithms in many areas, such as computer vision and speech recognition. This breakthrough was possible because computing power of modern computers is high enough to handle intensive workload required to train large artificial neural networks.
+Currently deep neural networks get better results than state-of-the-art algorithms in many areas, such as computer vision and speech recognition. This breakthrough was possible, because computing power of modern computers is high enough to handle intensive workload required to train large artificial neural networks.
 
 \section{Why are binarized networks interesting?}
-	Deep neural networks (DNN) usually use high precision (floating point) numbers to represent
+	Deep neural networks (DNN) usually use high precision (floating- point) numbers to represent
 	weights and activations. Computations using that arithmetic are usually handled by
 	graphic cards. On devices with low computing power, such as mobile phones, use of deep neural networks is very limited.
 	
@@ -208,7 +208,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
  	\section{Finetuned AlexNet on oxford-102}
  	It has been 5 years since the astonishing victory of AlexNet, although people are still experimenting with it achieving great results. jimgoo \cite{jimgoo} proposed an ingenious approach of learning which gave him a top 1 error rate of $7\%$ on oxford-102 set. In this experiment we try to replicate the results and find out whether it is possible to achieve a similar accuracy using binarized networks. 
  		\subsection{Oxford-flowers-102}
- 		The Oxford flowers dataset contains the most common flowers found in United Kingdom. Each image represents a single flower. Within each class, the examples do not differ much but there exists a number of similar classes which makes the task harder. The images are saved in large resolution and their sizes are not normalized. The dataset is split into 3 parts: test (6,149 pictures), train (1,020 images) and validation (1,020 images). In this experiment, the machine is trained on the test set and tested against the train set as the authors of CaffeNet fine-tuned on the Oxford 102 category flower dataset did.
+ 		The Oxford flowers dataset contains the most common flowers found in the United Kingdom. Each image represents a single flower. Within each class, the examples do not differ much but there exists a number of similar classes which makes the task harder. The images are saved in large resolution and their sizes are not normalized. The dataset is split into 3 parts: test (6,149 pictures), train (1,020 images) and validation (1,020 images). In this experiment, the machine is trained on the test set and tested against the train set as the authors of CaffeNet fine-tuned on the Oxford 102 category flower dataset did.
  			\begin{figure}[h]
 				\caption{Examples of Oxford-flowers-102 pictures}
 				\centering
@@ -304,7 +304,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 \\
 	When it comes to the build automation tool, there was no need to have one for the Python implementation and experiments. In case of the implemented C++ operation the team has used the build automation tool which is used by the Tensorflow framework, namely Bazel.	
 \\
-	To simplify communication between members of the team and other people involved in this project we used Slack, where a list of dedicated channels were created. This has helped in ordering the discussions over different topics, as one topic was hold in one channel.
+	To simplify communication between members of the team and other people involved in this project we used Slack, where a list of dedicated channels was created. This has helped in ordering the discussions over different topics, as one topic was hold in one channel.
 
 	\section{Used methodology}
 
