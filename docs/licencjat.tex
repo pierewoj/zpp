@@ -120,19 +120,23 @@ Currently deep neural networks get better results than state-of-the-art algorith
     \end{itemize}
 
 \part{Architecture overview}
-\chapter{Implemented binarization algorithms}
-	In order to get binarized network from standard network we implemented two binarization algorithms proposed by XNORNET paper. The main difference is that first one binarized only filters while second change both filters and activation to binary. 
-	\section{Binarized filters}
-        In this approach, we use special binarized filter for forward propagation.
+\chapter{Binarization algorithms}
+    Our approaches to neural network binarization are heavily inspired by the XNORNET paper. We have implemented two kinds of binarization: in the first one we only binarize weights, while in the second one we binarize both weights and activations. By binarization we mean mapping values from floating points into a set ${-1,1}$.
+    
+	\section{Binarized weights}
+        In this approach, binarized convolution layer output is computed as follows:
         \\\\
-        For an original filter $W$ the forward propagation works as follows:
+        For each filter in this layer:
         \begin{enumerate}
-                \item Let $n$ be the total number of elements in each filter, e.g., if a filter is a matrix $3 \times 3$ then $n=9$.
-                \item Let $W'$ be a matrix containing the signs of $W$.
-                \item Calculate $A$ -- the average of elements for each filter in $W'$, so $A$ is a vector of size equal to the number of filters in the layer.
-                \item Compute the standard convolution using matrix $W'$.
-                \item Return the result of convolution multiplied by $A$.
+                \item Let $n$ be the total number of weights in filter, e.g., if a filter is a matrix $3 \times 3$ then $n=9$.
+                \item Lest $I$ be the layer's input.
+                \item Compute $W' = sign(W)$, where $sign$ is computed element-wise
+                \item Compute scalar value $\alpha = \frac{\sum{|W_{ij}|}}{n}$
+                \item Output $O = (W'\star I) *\alpha$, where $\star$ is a convolutaion operator. Convolution between $W'$ and $I$ can be camputed using only subtraction and addition, because $W'$ contains only $1's$ and $-1$'s.
         \end{enumerate}
+        
+        It is proved in the XNORNET paper, that $\alpha$ minimizes the square mean error between $O$ and $W\star I$.
+        \\\\
         The back propagation is the standard backward propagation made by using the original $W$ matrix. To achieve this result, we override the standard gradient to change the sign to identity.
         \\\\
         In this type of binarizations, the gradients are in full precision, therefore the backward-pass still requires convolution between 1-bit numbers and 32-bit floating-points.
@@ -141,15 +145,18 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		        For an original filter $W$ and input $I$ the forward propagation proceeds as follows:
 		        \begin{enumerate}
 		                \item Let $n$ be the number of elements in each filter.
-		                \item Let $W_{sign}$ be a matrix containing the signs of $W$ divided by $A$.
-		                \item Calculate $A$ -- the average of elements for each filter in $W_{sign}$, so that $A$ is a vector of size equal to the number of filters in the layer.
-		                \item Let $I_{abs}$ be a matrix with the absolute values of the input.
-		                \item Let $I_{sign}$ be a matrix with the signs of the input.
-		                \item Let $K$ to be the result of computation of the standard convolution using as input $I_{abs}$ and as weights matrix containing $\frac{1}{n}$ on each position.
-		                \item Compute the standard convolution using input $I_{sign}$ and weights $W_{sign}$.
-		                \item Return the result multiplied by $K$ and $A$.
+		                \item Compute $W_{sign} = sign(W)$.
+		                \item Compute scalar value $\alpha = \frac{\sum{|W_{ij}|}}{n}$
+		                \item Compute $I_{abs}$ be a matrix with the absolute values of the input.
+		                \item Compute $I_{sign} = sign(I)$ be a matrix of the signs of the input.
+		                \item Let $K$ be the result of the standard convolution using as input $I_{abs}$ and as weights matrix $k$ which has the same size as the input and is defined as follows: $k_{ij} = \frac{1}{n}$
+		                \item Return $O = (I_{sign} \star W_{sign}) * \alpha * K$. Multiplying by $K$ is element-wise.
 		        \end{enumerate}
-
+		        \\\\
+		It is worth noting that computing convolution in the last step can be done really efficiently. Both of operands contain only binary values, so it is possible to use only XNOR bitcount operations. Computation time savings are discussed in the next chapter.
+		\\\\
+		On the other hand, binarization leads to a loss of information, so intuitively it should cause worse neural network performance. Effects of binarization on accuracy are our main contribution and are described in detail in next chapters.
+		
 	\chapter{Advantages of binarized neural network}
     One of the advantages of using binarized neural networks is that we can save trained weights as binary numbers and store them on a device with limited resources. What is more, it is also possible to optimize the computation time. In this section, it is discussed exactly how much space and time we can save when using different kinds of binarization.
     
