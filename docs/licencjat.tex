@@ -39,14 +39,14 @@ This project was created during "Team programming project" classes in 2016/17 an
 	
 \section{What is deep learning and why is it interesting?}
 
-Deep learning is a branch of machine learning which tries to model high level abstractions in data (like understanding words or finding objects on image) using a graph of simple elements - neurons, connected with specific activations and weights to others. It has recently gained a lot of interest from the industry, especially after recent successes in image or speech recognision.
+Deep learning is a branch of machine learning which tries to model high level abstractions in the data (like understanding words or finding objects on image) using a graph of simple elements - neurons, connected with specific activations and weights to others. It has recently gained a lot of interest from the industry, especially after recent successes in image or speech recognision.
 
-The most important part of deep learning is training a net based on samples that the result is known. After each training step one can change weights and activation in model to make output of the network as close as possible to the expected value.
+The most important part of deep learning is training a net based on samples, which classification is already known. After each training step one can change weights and activation in model to make output of the network as close as possible to the expected value.
 
-Currently deep neural networks get better results than state-of-the-art algorithms in many areas, such as computer vision and speech recognition. This breakthrough was possible because computing power of modern computers is high enough to handle intensive workload required to train large artificial neural networks.
+Currently deep neural networks get better results than state-of-the-art algorithms in many areas, such as computer vision and speech recognition. This breakthrough was possible, because computing power of modern computers is high enough to handle intensive workload required to train large artificial neural networks.
 
 \section{Why are binarized networks interesting?}
-	Deep neural networks (DNN) usually use high precision (floating point) numbers to represent
+	Deep neural networks (DNN) usually use high precision (floating- point) numbers to represent
 	weights and activations. Computations using that arithmetic are usually handled by
 	graphic cards. On devices with low computing power, such as mobile phones, use of deep neural networks is very limited.
 	
@@ -120,19 +120,23 @@ Currently deep neural networks get better results than state-of-the-art algorith
     \end{itemize}
 
 \part{Architecture overview}
-\chapter{Implemented binarization algorithms}
-	In order to get binarized network from standard network we implemented two binarization algorithms proposed by XNOR-Net paper. The main difference is that first one binarized only filters while second change both filters and activation to binary. 
-	\section{Binarized filters}
-        In this approach, we use special binarized filter for forward propagation.
+\chapter{Binarization algorithms}
+    Our approaches to neural network binarization are heavily inspired by the XNORNET paper. We have implemented two kinds of binarization: in the first one we only binarize weights, while in the second one we binarize both weights and activations. By binarization we mean mapping values from floating points into a set ${-1,1}$.
+    
+	\section{Binarized weights}
+        In this approach, binarized convolution layer output is computed as follows:
         \\\\
-        For an original filter $W$ the forward propagation works as follows:
+        For each filter in this layer:
         \begin{enumerate}
-                \item Let $n$ be the total number of elements in each filter, e.g., if a filter is a matrix $3 \times 3$ then $n=9$.
-                \item Let $W'$ be a matrix containing the signs of $W$.
-                \item Calculate $A$ -- the average of elements for each filter in $W'$, so $A$ is a vector of size equal to the number of filters in the layer.
-                \item Compute the standard convolution using matrix $W'$.
-                \item Return the result of convolution multiplied by $A$.
+                \item Let $n$ be the total number of weights in filter, e.g., if a filter is a matrix $3 \times 3$ then $n=9$.
+                \item Lest $I$ be the layer's input.
+                \item Compute $W' = sign(W)$, where $sign$ is computed element-wise
+                \item Compute scalar value $\alpha = \frac{\sum{|W_{ij}|}}{n}$
+                \item Output $O = (W'\star I) *\alpha$, where $\star$ is a convolutaion operator. Convolution between $W'$ and $I$ can be camputed using only subtraction and addition, because $W'$ contains only $1's$ and $-1$'s.
         \end{enumerate}
+        
+        It is proved in the XNORNET paper, that $\alpha$ minimizes the square mean error between $O$ and $W\star I$.
+        \\\\
         The back propagation is the standard backward propagation made by using the original $W$ matrix. To achieve this result, we override the standard gradient to change the sign to identity.
         \\\\
         In this type of binarizations, the gradients are in full precision, therefore the backward-pass still requires convolution between 1-bit numbers and 32-bit floating-points.
@@ -141,20 +145,23 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		        For an original filter $W$ and input $I$ the forward propagation proceeds as follows:
 		        \begin{enumerate}
 		                \item Let $n$ be the number of elements in each filter.
-		                \item Let $W_{sign}$ be a matrix containing the signs of $W$ divided by $A$.
-		                \item Calculate $A$ -- the average of elements for each filter in $W_{sign}$, so that $A$ is a vector of size equal to the number of filters in the layer.
-		                \item Let $I_{abs}$ be a matrix with the absolute values of the input.
-		                \item Let $I_{sign}$ be a matrix with the signs of the input.
-		                \item Let $K$ to be the result of computation of the standard convolution using as input $I_{abs}$ and as weights matrix containing $\frac{1}{n}$ on each position.
-		                \item Compute the standard convolution using input $I_{sign}$ and weights $W_{sign}$.
-		                \item Return the result multiplied by $K$ and $A$.
+		                \item Compute $W_{sign} = sign(W)$.
+		                \item Compute scalar value $\alpha = \frac{\sum{|W_{ij}|}}{n}$
+		                \item Compute $I_{abs}$ be a matrix with the absolute values of the input.
+		                \item Compute $I_{sign} = sign(I)$ be a matrix of the signs of the input.
+		                \item Let $K$ be the result of the standard convolution using as input $I_{abs}$ and as weights matrix $k$ which has the same size as the input and is defined as follows: $k_{ij} = \frac{1}{n}$
+		                \item Return $O = (I_{sign} \star W_{sign}) * \alpha * K$. Multiplying by $K$ is element-wise.
 		        \end{enumerate}
-
+		        \\\\
+		It is worth noting that computing convolution in the last step can be done really efficiently. Both of operands contain only binary values, so it is possible to use only XNOR bitcount operations. Computation time savings are discussed in the next chapter.
+		\\\\
+		On the other hand, binarization leads to a loss of information, so intuitively it should cause worse neural network performance. Effects of binarization on accuracy are our main contribution and are described in detail in next chapters.
+		
 	\chapter{Advantages of binarized neural network}
     One of the advantages of using binarized neural networks is that we can save trained weights as binary numbers and store them on a device with limited resources. What is more, it is also possible to optimize the computation time. In this section, it is discussed exactly how much space and time we can save when using different kinds of binarization.
     
     \section{Binarized weights}
-        In this case we store a binary value instead of a floating point one for each weight. In addition, we also need to store coefficients $\alpha$ which are floating-point numbers. The amount of these coefficients depends on the type of binarization we perform. Computing $\alpha$ for each kernel compared to computing it for each layer gives us slightly worse space and computation time savings, but yields better accuracy.
+        In this case we store a binary value instead of a floating-point one for each weight. In addition, we also need to store coefficients $\alpha$ which are floating-point numbers. The amount of these coefficients depends on the type of binarization we perform. Computing $\alpha$ for each kernel compared to computing it for each layer gives us slightly worse space and computation time savings, but yields better accuracy.
         
         A general formula for space savings is as follows (assuming we use 32-bit floating-point numbers):
         $$s_m =  \frac{space_{bin}}{space_{float}} = \frac{\#_\alpha * 32bit + \#_{weights}*1bit}{\#_{weights} * 32bit} \text{.}$$
@@ -208,7 +215,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
  	\section{Finetuned AlexNet on oxford-102}
  	It has been 5 years since the astonishing victory of AlexNet, although people are still experimenting with it and achieve great results. jimgoo \cite{jimgoo} proposed an ingenious approach of learning which gave him a top 1 error rate of $7\%$ on oxford-102 set. In this experiment we try to replicate the results and find out whether it is possible to achieve a similar accuracy using binarized networks. 
  		\subsection{Oxford-flowers-102}
- 		The Oxford flowers dataset contains the most common flowers found in United Kingdom. Each image represents a single flower. Within each class, the examples do not differ much but there exists a number of similar classes which makes the task harder. The images are saved in large resolution and their sizes are not normalized. The dataset is split into 3 parts: test (6,149 pictures), train (1,020 images) and validation (1,020 images). In this experiment, the machine is trained on the test set and tested against the train set as the authors of CaffeNet fine-tuned on the Oxford 102 category flower dataset did.
+ 		The Oxford flowers dataset contains the most common flowers found in the United Kingdom. Each image represents a single flower. Within each class, the examples do not differ much but there exists a number of similar classes which makes the task harder. The images are saved in large resolution and their sizes are not normalized. The dataset is split into 3 parts: test (6,149 pictures), train (1,020 images) and validation (1,020 images). In this experiment, the machine is trained on the test set and tested against the train set as the authors of CaffeNet fine-tuned on the Oxford 102 category flower dataset did.
  			\begin{figure}[h]
 				\caption{Examples of Oxford-flowers-102 pictures}
 				\centering
@@ -265,7 +272,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\caption{Scheme of single ResNet block}
 		\label{fig:144}
 				\centering
-				\includegraphics[width=\textwidth]{AlexNet}
+				\includegraphics[width=\textwidth]{images/block}
 		\end{figure}
 		We use blocks to construct Resnet(n) in a following way:
 		\begin{itemize}
@@ -283,7 +290,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\caption{Scheme of ResNet architecture}
 		\label{fig:666}
 				\centering
-				\includegraphics[width=\textwidth]{AlexNet}
+				\includegraphics[width=\textwidth]{images/resnet}
 		\end{figure}
 		\subsection{Parameters}
 			\begin{itemize}
@@ -296,7 +303,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 \chapter{The development process}
 
 	\section{Used software tools}
-	A range of external tools was used in order to organize the work and to have a better overview of the current status of all of the ongoing tasks.
+	A range of external tools was used in order to organise the work and to have a better overview of the current status of all of the ongoing tasks.
 \\
 	Git was chosen as a version control system for this project mainly due to its advantages when it comes to local branching and that every member of the team had some experience with this tool.
 \\
@@ -304,7 +311,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 \\
 	When it comes to the build automation tool, there was no need to have one for the Python implementation and experiments. In case of the implemented C++ operation the team has used the build automation tool which is used by the Tensorflow framework, namely Bazel.	
 \\
-	To simplify communication between members of the team and other people involved in this project we used Slack, where a list of dedicated channels were created. This has helped in ordering the discussions over different topics, as one topic was hold in one channel.
+	To simplify communication between members of the team and other people involved in this project we used Slack, where a list of dedicated channels was created. This has helped in ordering the discussions over different topics, as one topic was hold in one channel.
 
 	\section{Used methodology}
 
@@ -326,7 +333,8 @@ Currently deep neural networks get better results than state-of-the-art algorith
 \chapter{Implementation details}
 
 \section{Implementation in Python}
-Tensorflow Python library offers numerous built-in functions for machine learning and data exploring. Every operation is supplied with modifiable gradient. It significantly lessens the amount of effort and code written by  scientists. There are more advantages of using built-in tensorflow's functions. First of all, almost every Tensorflow’s operation provides a GPU implementation. It is a crucial feature. The computing power of GPU devices is much greater than CPU's one. Also, GPUs have an ability to perform more computations in parallel. Models trained on GPU are computed several times quicker due to parallelization. Secondly, our binarized operations are less likely to have implementation bugs. Assuming that Tensorflow’s functions compute correctly, the only thing to do is compose them and modify the gradients so that it will fit XNOR-Net authors' equations \cite{xnornet}. It is a great advantage, especially on early stage, because future C++ operation can be based on it.
+
+Tensorflow Python library offers numerous built-in functions for machine learning and data exploring. Every operation is supplied with modifiable gradient. It significantly lessens the amount of effort and code written by  scientists. There are more advantages of using built-in tensorflow's functions. First of all, almost every Tensorflow’s operation provides a GPU implementation. It is a crucial feature. The computing power of GPU devices is much greater than CPU's one. Also, GPUs have an ability to perform more computations in parallel, by which the models trained on GPU are computed several times quicker. Secondly, our binarized operations are less likely to have implementation bugs. Assuming that Tensorflow’s functions compute correctly, the only thing to do is compose them and modify the gradients so that it will fit XNORNET authors' equations. It is a great advantage, especially on early stage, because future C++ operation can be based on it.
 		 
 Tensorflow library provides a wrapper for user-defined functions. We used it at the beginning, but it quickly turned out that writing a custom function leads into trouble. The approach got changed. Instead of writing own function, we started to compose built-in ones. The most tricky part comes when parameters need to be binarized. On one hand, in feed-forward, the convolution must be computed with binary parameters. On the other hand, in backward propagation, the gradient must be computed with respect to the full-precision parameters. First part of this problem was solved by applying signum function. Unfortunately, this application affects the gradient computation. Changing the gradient function of signum to identity fixed the second part of the problem (this fix was firstly applied in DoReFa-Net). The implementation supports both weights and weights \& inputs binarization. The second method does not compute redundant factors, i.e., the second technique described in XNOR-Net paper \cite{xnornet} is used.
 
@@ -401,7 +409,7 @@ Tensorflow library provides a wrapper for user-defined functions. We used it at 
 				\includegraphics[width=\textwidth]{images/LeNet-training}
 			\end{figure}
 		        \paragraph{Discussion} 
-			Both binarization methods acquired near state-of-the-art scores. The MNIST dataset is really simple and the LeNet structure is not complicated. Thus, the binarization does not significantly affect on the precision. The results are not surprising nor ground-breaking. We made this experiment mostly for verifying our binarization methods.
+			Both binarization methods acquired near state-of-the-art scores. The MNIST dataset is really simple and the LeNet structure is not complicated. Thus, the binarization does not significantly affect the precision. The results are neither surprising nor ground-breaking. We made this experiment mostly for verifying our binarization methods.
 	\section{AlexNet on Flowers}
 		\subsection{Binarization results and discussion}
 		        The results of experiments are given in Table \ref{table:2}.
@@ -425,7 +433,7 @@ Tensorflow library provides a wrapper for user-defined functions. We used it at 
 			\end{figure}
 	            
 		        \paragraph{Discussion} 
-                        The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not lose as much precision as it was expected. Surprisingly, the binary weights network outperforms the full-precision one.
+                        The results are promising considering the input images have high resolution. This experiment shows that fully binarized network does not loose as much precision as it was expected. Surprisingly, the binary weights network outperforms the full-precision one.
 		\subsection{Fine-tuning results and discussion}
 		     
 		        The results of experiments are in table \ref{table:1}.
@@ -478,11 +486,11 @@ Tensorflow library provides a wrapper for user-defined functions. We used it at 
 			\end{figure}
 		        \paragraph{Discussion} 
 
-		        The results of binarized network are very good comparing to standard ResNet. The property of ResNet is preserved and the are no much difference in accuracy. That is an interesting result as it shows that binarizing ResNet only slightly decreases its accuracy so it is worth to use binarization to save memory and computation time, especially on CPU.
+		        The results of binarized network are very good comparing to standard ResNet. The property of ResNet is preserved and the difference in accuracy is not significant. It is an interesting result as it shows that binarizing ResNet only slightly decreases its accuracy. Taking this into consideration, it is worth to use binarization to save memory and computation time, especially on CPU.
 
 			\subsubsection{Binary Resnet with binary weights and inputs}
 			        \paragraph{Discussion} 
-				We did not manage to train any size of ResNet with binary weights and inputs, though the authors of XNOR-Net claim that their network achieves near state-of-the-art results. They did not provide any code, so we were struggling with it on our own. The size of ResNet makes it very delicate -- a small change in the learning rate has a great impact on the accuracy. In this experiment, the best, yet still unsatisfactory, accuracy was achieved by ResNet-2 with the score of 20\%. 
+				We did not manage to train ResNet of any size with binary weights and inputs, though the authors of XNORNET claim that their network achieves near state-of-the-art results. They did not provide any code, so we were struggling with it on our own. The size of ResNet makes it very delicate -- a small change in the learning rate has a great impact on the accuracy. In this experiment, the best, yet still unsatisfactory, accuracy was achieved by ResNet-2 with the score of 20\%. 
 				During experiments we strugled with following issues:
 			        \begin{itemize}
 			                \item An implementation which uses \texttt{tf.nn.conv2d} twice in each binarization process is much slower. 
@@ -495,7 +503,7 @@ Tensorflow library provides a wrapper for user-defined functions. We used it at 
 	Every binarization of LeNet achieved near state-of-the-art results. An experiment in which we increase the amount of feature maps in LeNet yielded non-interesting results because there results were already very good.
 	\section{AlexNet on flowers-102}
 	\subsection{Discussion}
-	Combining pretrained feature maps with randomized ones leads to a trouble. No network managed to converge. Only if the randomized parameters are set to values near 0, the networks start to learn. The problem is that new parameters do not have significant meaning, so this experiment reduces to the one in the previous section. On the other hand, our resources are too small to obtain pretrained, scaled filters, because it requires to train AlexNet on the ImageNet dataset, which has over 1.2 million of images.
+	Combining pretrained feature maps with randomized ones leads to troubles. No network managed to converge. Only if the randomized parameters are set to values near 0, the networks start to learn. The problem is that new parameters do not have significant meaning, so this experiment reduces to the one in the previous section. On the other hand, our resources are too small to obtain pretrained, scaled filters, because it requires to train AlexNet on the ImageNet dataset, which has over 1.2 million of images.
 	\section{AlexNet on flowers-17}
 	\subsection{Discussion}
 	Weights binarization led to the state-of-the-art performance, so we omit this case. Unfortunately, we did not manage to achieve greater performance on the binary weights \& inputs network with increased number of feature maps. The more we increased the amount of feature maps, the worse accuracy on testing set we achieved (3\% on average), though the training set accuracy rose (from 73\% to 80\%). It also requires about 3 times longer training.  We were not able to run networks with higher feature map ratio than 2, because the size of the network exceed the resources of our laptops.
@@ -513,11 +521,11 @@ Tensorflow library provides a wrapper for user-defined functions. We used it at 
 
 \chapter{Conclusions}
 	\section{Discussion of experiments results}
-		Our experiments confirmed our expectation -- binarized neural network can achieve accuracy which is very close to non-binarized networks. It works pretty well with simple architectures such as LeNet and AlexNet. On more complicated network, such as ResNet, there one must be very careful with setting up parameters. 
+		Our experiments confirmed our thesis -- binarized neural network can achieve accuracy which is very close to their respective non-binarized equivalents. It works pretty well with simple architectures such as LeNet and AlexNet. On more complicated network, such as ResNet, one must be very careful when setting up parameters. 
 	
-		For partially binarized network (with only filters binarized) we got great results for all tested architectures.
+		For partially binarized network (with only filters binarized) we obtained great results for all tested architectures.
 		
-		For all networks increasing the number of filters by around 100\% allowed us to achieve accuracy as good as the one of original network. This result is very promising -- if we take twice as many parameters but each of them is 32 times shorter (after converting a float to a boolean value) we still use 16 times less memory.
+		Increasing the number of filters by around 100\% for each binarized network allowed us to achieve accuracy as good as the one of the original one. This result is very promising -- if we take twice as many parameters but each of them is 32 times shorter (after converting a float to a boolean value) we still use 16 times less memory.
 
 	\section{Future work}
 		There are several aspects that could benefit from futher analysis, namely:
