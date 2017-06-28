@@ -121,7 +121,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 \part{Architecture overview}
 \chapter{Binarization algorithms}
-    Our approaches to neural network binarization are heavily inspired by the XNORNET paper. We have implemented two kinds of binarization: in the first one we only binarize weights, while in the second one we binarize both weights and activations. By binarization we mean mapping values from floating points into a set ${-1,1}$.
+    Our approaches to neural network binarization are heavily inspired by the XNOR-Net paper. We have implemented two kinds of binarization: in the first one we only binarize weights, while in the second one we binarize both weights and activations. By binarization we mean mapping values from floating points into a set ${-1,1}$.
     
 	\section{Binarized weights}
         In this approach, binarized convolution layer output is computed as follows:
@@ -135,7 +135,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
                 \item Output $O = (W'\star I) *\alpha$, where $\star$ is a convolutaion operator. Convolution between $W'$ and $I$ can be camputed using only subtraction and addition, because $W'$ contains only $1's$ and $-1$'s.
         \end{enumerate}
         
-        It is proved in the XNORNET paper, that $\alpha$ minimizes the square mean error between $O$ and $W\star I$.
+        It is proved in the XNOR-Net paper, that $\alpha$ minimizes the square mean error between $O$ and $W\star I$.
         \\\\
         The back propagation is the standard backward propagation made by using the original $W$ matrix. To achieve this result, we override the standard gradient to change the sign to identity.
         \\\\
@@ -334,7 +334,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 
 \section{Implementation in Python}
 
-Tensorflow Python library offers numerous built-in functions for machine learning and data exploring. Every operation is supplied with modifiable gradient. It significantly lessens the amount of effort and code written by  scientists. There are more advantages of using built-in tensorflow's functions. First of all, almost every Tensorflow’s operation provides a GPU implementation. It is a crucial feature. The computing power of GPU devices is much greater than CPU's one. Also, GPUs have an ability to perform more computations in parallel, by which the models trained on GPU are computed several times quicker. Secondly, our binarized operations are less likely to have implementation bugs. Assuming that Tensorflow’s functions compute correctly, the only thing to do is compose them and modify the gradients so that it will fit XNORNET authors' equations. It is a great advantage, especially on early stage, because future C++ operation can be based on it.
+Tensorflow Python library offers numerous built-in functions for machine learning and data exploring. Every operation is supplied with modifiable gradient. It significantly lessens the amount of effort and code written by  scientists. There are more advantages of using built-in tensorflow's functions. First of all, almost every Tensorflow’s operation provides a GPU implementation. It is a crucial feature. The computing power of GPU devices is much greater than CPU's one. Also, GPUs have an ability to perform more computations in parallel, by which the models trained on GPU are computed several times quicker. Secondly, our binarized operations are less likely to have implementation bugs. Assuming that Tensorflow’s functions compute correctly, the only thing to do is compose them and modify the gradients so that it will fit XNOR-Net authors' equations. It is a great advantage, especially on early stage, because future C++ operation can be based on it.
 		 
 Tensorflow library provides a wrapper for user-defined functions. We used it at the beginning, but it quickly turned out that writing a custom function leads into trouble. The approach got changed. Instead of writing own function, we started to compose built-in ones. The most tricky part comes when parameters need to be binarized. On one hand, in feed-forward, the convolution must be computed with binary parameters. On the other hand, in backward propagation, the gradient must be computed with respect to the full-precision parameters. First part of this problem was solved by applying signum function. Unfortunately, this application affects the gradient computation. Changing the gradient function of signum to identity fixed the second part of the problem (this fix was firstly applied in DoReFa-Net). The implementation supports both weights and weights \& inputs binarization. The second method does not compute redundant factors, i.e., the second technique described in XNOR-Net paper \cite{xnornet} is used.
 
@@ -490,7 +490,7 @@ Tensorflow library provides a wrapper for user-defined functions. We used it at 
 
 			\subsubsection{Binary Resnet with binary weights and inputs}
 			        \paragraph{Discussion} 
-				We did not manage to train ResNet of any size with binary weights and inputs, though the authors of XNORNET claim that their network achieves near state-of-the-art results. They did not provide any code, so we were struggling with it on our own. The size of ResNet makes it very delicate -- a small change in the learning rate has a great impact on the accuracy. In this experiment, the best, yet still unsatisfactory, accuracy was achieved by ResNet-2 with the score of 20\%. 
+				We did not manage to train ResNet of any size with binary weights and inputs, though the authors of XNOR-Net claim that their network achieves near state-of-the-art results. They did not provide any code, so we were struggling with it on our own. The size of ResNet makes it very delicate -- a small change in the learning rate has a great impact on the accuracy. In this experiment, the best, yet still unsatisfactory, accuracy was achieved by ResNet-2 with the score of 20\%. 
 				During experiments we strugled with following issues:
 			        \begin{itemize}
 			                \item An implementation which uses \texttt{tf.nn.conv2d} twice in each binarization process is much slower. 
