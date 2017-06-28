@@ -260,14 +260,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 			\item Convolution layer with $num\_filters$ of $size\_filters$ size
 			\item Identity connection which adds input to output of second convolution
 		\end{itemize}
-		The general scheme of a single block can be seen on figure \ref{fig:144}
-		\begin{figure}[h]
-		\caption{Scheme of single ResNet block}
-		\label{fig:144}
-				\centering
-				\includegraphics[width=\textwidth]{AlexNet}
-		\end{figure}
-		We use blocks to construct Resnet(n) in a following way:
+		We use blocks to construct ResNet(n) in a following way:
 		\begin{itemize}
 			\item convolutional layer of size matching input of network (for CIFAR it is 32)
 			\item n blocks(16,32)
@@ -283,7 +276,7 @@ Currently deep neural networks get better results than state-of-the-art algorith
 		\caption{Scheme of ResNet architecture}
 		\label{fig:666}
 				\centering
-				\includegraphics[width=\textwidth]{AlexNet}
+				\includegraphics[width=\textwidth]{ResNet}
 		\end{figure}
 		\subsection{Parameters}
 			\begin{itemize}
